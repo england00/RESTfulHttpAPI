@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Api
 from resources.device_resource import DeviceResource
 from resources.devices_resource import DevicesResource
 from model.device_model import DeviceModel

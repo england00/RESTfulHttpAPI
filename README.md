@@ -8,7 +8,10 @@ The implementation is based on the following Python Frameworks
 - Flask: https://flask.palletsprojects.com/en/2.0.x/
 - Flask RESTful: https://flask-restful.readthedocs.io/en/latest/index.html
 
-APIs are exposed through a configurable port (7070) and accessible locally at: http://127.0.0.1:7070/api/iot/
+APIs are exposed through a configurable port (7070) and accessible locally at: 
+- http://127.0.0.1:7070/api/iot/
+- https://192.168.1.2:7070/api/iot/
+- https://79.21.207.114:7070/api/iot/
 
 ## Modeled REST Resources
 
