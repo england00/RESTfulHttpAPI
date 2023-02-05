@@ -10,35 +10,40 @@ class DeviceResource(Resource):
         self.dataManager = kwargs['data_manager']
 
     def get(self, device_id):
+        # in this method we can obtain the list of all the specs of a single device only from the device id
         if device_id in self.dataManager.device_dictionary:
             return self.dataManager.device_dictionary[device_id].__dict__, 200  # return data and 200 OK code
         else:
-            return {'error': "Device Not Found !"}, 404
+            return {'ERROR': "Device Not Found!"}, 404
 
     def put(self, device_id):
+        # in this method we can update the specs of different devices together controlling information in json format
         try:
             if device_id in self.dataManager.device_dictionary:
                 # The boolean flag force the parsing of POST data as JSON irrespective of the mimetype
                 json_data = request.get_json(force=True)
-                deviceCreationRequest = DeviceCreationRequest(**json_data)
-                if deviceCreationRequest.uuid != device_id:
-                    return {'error': "UUID mismatch between body and resource"}, 400
+                device_creation_request = DeviceCreationRequest(**json_data)
+                if device_creation_request.uuid != device_id:
+                    return {'ERROR': "UUID mismatch between body and resource"}, 400
                 else:
-                    self.dataManager.update_device(deviceCreationRequest)
-                    return Response(status=204)
+                    self.dataManager.update_device(device_creation_request)
+                    return Response(status=201, headers={"Location": request.url + "/" + device_creation_request.uuid})
             else:
-                return {'error': "Device UUID not found"}, 404
+                return {'ERROR': "Device UUID not found"}, 404
         except JSONDecodeError:
-            return {'error': "Invalid JSON ! Check the request"}, 400
+            return {'ERROR': "Invalid JSON! Check the request"}, 400
         except Exception as e:
-            return {'error': "Generic Internal Server Error ! Reason: " + str(e)}, 500
+            return {'ERROR': "Generic Internal Server Error! Reason: " + str(e)}, 500
 
     def delete(self, device_id):
+        # in this method we can directly delete from the list of all the devices a single one only with the device id
         try:
             if device_id in self.dataManager.device_dictionary:
-               self.dataManager.remove_device(device_id)
-               return Response(status=204)
+                self.dataManager.remove_device(device_id)
+                return Response(status=204, headers={"Location": request.url + "/" + device_id})
             else:
-                return {'error': "Device UUID not found"}, 404
+                return {'ERROR': "Device UUID not found"}, 404
+        except JSONDecodeError:
+            return {'error': "Invalid JSON! Check the request"}, 400
         except Exception as e:
-            return {'error': "Generic Internal Server Error ! Reason: " + str(e)}, 500
+            return {'ERROR': "Generic Internal Server Error! Reason: " + str(e)}, 500
