@@ -1,5 +1,5 @@
 import json
-from model.device_model import DeviceModel
+from models.device_model import DeviceModel
 
 test_json_string = '{"uuid": "device00002","name": "Demo Temperature Sensor 2","locationId": "000001","type": ' \
                    '"dev:dummy:temperature","attributes": {"min_value": -200,"unit": "C","software_version": "0.0.1",' \

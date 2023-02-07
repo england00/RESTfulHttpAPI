@@ -1,4 +1,4 @@
-from model.device_model import DeviceModel
+from models.device_model import DeviceModel
 
 
 class DataManager:
