@@ -1,18 +1,5 @@
-from models.device_model import DeviceModel
+from models.resource_model import ResourceModel
 
 
-class IResourceCreationRequest:
+class IResourceCreationRequest(ResourceModel):
     pass
-
-
-def setModel(v):
-    global model
-    model = v
-
-
-def modifyIResourceCreationRequest():
-    global IResourceCreationRequest
-
-    if model == "device":
-        IResourceCreationRequest = type('IResourceCreationRequest', (DeviceModel,),
-                                        dict(IResourceCreationRequest.__dict__))

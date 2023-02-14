@@ -1,0 +1,135 @@
+resources:
+  start_stop_cycle:
+    uuid: "start_stop_cycle"
+    version: 1
+    unit: "u"
+    topic: "/start_stop_cycle/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  recipe_objects_types:
+    uuid: "recipe_objects_types"
+    version: 1
+    unit: "u"
+    topic: "/recipe_objects_types/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  recipe_end_effector_indexes:
+    uuid: "recipe_end_effector_indexes"
+    version: 1
+    unit: "u"
+    topic: "/recipe_end_effector_indexes/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  recipe_object_types_box_positions:
+    uuid: "recipe_object_types_box_positions"
+    version: 1
+    unit: "u"
+    topic: "/recipe_object_types_box_positions/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  recipe_object_types_numbers:
+    uuid: "recipe_object_types_numbers"
+    version: 1
+    unit: "u"
+    topic: "/recipe_object_types_numbers/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  total_bags:
+    uuid: "total_bags"
+    version: 1
+    unit: "u"
+    topic: "/total_bags/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  6d_pose_estimation:
+    uuid: "6d_pose_estimation"
+    version: 1
+    unit: "u"
+    topic: "/6d_pose_estimation/c"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  selected_recipe:
+    uuid: "selected_recipe"
+    version: 1
+    unit: "u"
+    topic: "/production/cycle/recipes/selected_recipe"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  placed_objects:
+    uuid: "placed_objects"
+    version: 1
+    unit: "u"
+    topic: "placed_objects/t"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  done_bags:
+    uuid: "done_bags"
+    version: 1
+    unit: "u"
+    topic: "done_bags/t"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  current_object:
+    uuid: "current_object"
+    version: 1
+    unit: "u"
+    topic: "current_object/t"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  cobot_state_cycle:
+    uuid: "cobot_state_cycle"
+    version: 1
+    unit: "u"
+    topic: "/cobot_state_cycle/t"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  joints_current_consumption_ma:
+    uuid: "joints_current_consumption_ma"
+    version: 1
+    unit: "u"
+    topic: "/joints_current_consumption_ma/t"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  joints_temperature_c:
+    uuid: "joints_temperature_c"
+    version: 1
+    unit: "u"
+    topic: "/joints_temperature_c/t"
+    qos: 0
+    retained: False
+    frequency: 1
+
+  safety:
+    uuid: "safety"
+    version: 1
+    unit: "u"
+    topic: "/safety/t"
+    qos: 0
+    retained: False
+    frequency: 1

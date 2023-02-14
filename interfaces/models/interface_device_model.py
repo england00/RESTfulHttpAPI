@@ -9,3 +9,7 @@ class IResourceModel(abc.ABC):
     @abc.abstractmethod
     def to_json(self):
         pass
+
+    @abc.abstractmethod
+    def to_SQL(self):
+        pass

@@ -1,19 +1,19 @@
 import socket
 import requests
-import creation_request.resource_creation_request
 from flask import Flask
 from flask_restful import Api
 from models.device_model import DeviceModel
 from persistence.data_manager import DataManager
 from resources.resources_methods import Resources
 from resources.resource_methods import SingleResource
+from database.database import MySQLDatabase
+from models.resource_mapper import ResourcesMapper
 
 # creating a Flask application
 app = Flask(__name__)
 api = Api(app)
 ENDPOINT_PREFIX = "/api/iot/inventory"
 print("Starting HTTP RESTful API Server ...")
-
 
 # FOR EACH RESOURCE MODEL
 # BEGIN
@@ -50,24 +50,29 @@ deviceDataManager.add_device(device00001)
 deviceDataManager.add_device(device00002)
 deviceDataManager.add_device(device00003)
 
-# setting models type
-creation_request.resource_creation_request.setModel("device")
-creation_request.resource_creation_request.modifyIResourceCreationRequest()
+# creating an object ResourcesMapper
+resources_mapper = ResourcesMapper()
 
 # adding the Resources class for "device" to the api
-api.add_resource(Resources, ENDPOINT_PREFIX + '/device',
-                 resource_class_kwargs={'data_manager': deviceDataManager},
-                 endpoint="devices",
+api.add_resource(Resources, ENDPOINT_PREFIX + '/resources',
+                 resource_class_kwargs={'resources_mapper': resources_mapper},
+                 endpoint="resources",
                  methods=['GET', 'POST'])
 
 # adding the SingleResource class for "device" to the api
-api.add_resource(SingleResource, ENDPOINT_PREFIX + '/device/<string:resource_id>',
-                 resource_class_kwargs={'data_manager': deviceDataManager},
-                 endpoint='device',
+api.add_resource(SingleResource, ENDPOINT_PREFIX + '/resources/<string:resource_id>',
+                 resource_class_kwargs={'resources_mapper': resources_mapper},
+                 endpoint='resource',
                  methods=['GET', 'PUT', 'DELETE'])
 
 # END
 
+# database params
+host = "localhost"
+user = "root"
+password = "HakertzDB32!"
+database = "devices"
+charset = "utf8"
 
 # printing local and public IPs
 localIp = socket.gethostbyname(socket.gethostname())
@@ -77,4 +82,7 @@ broadcastIp = "0.0.0.0"
 
 # executing the code (https with self-signed certificate)
 if __name__ == '__main__':
+    myDB = MySQLDatabase(host, user, password, charset)
+    myDB.start_connection()
+
     app.run(ssl_context='adhoc', host=broadcastIp, port=7070)  # run our Flask app
