@@ -29,20 +29,21 @@ class Resources(IRequests):
     # POST method: adding a resource and saving it in json format inside the resource list
     def post(self):
         try:
-            # the boolean flag force the parsing of POST data as JSON irrespective of the mimetype
-            json_data = request.get_json(force=True)
-            resource_creation_request = IResourceCreationRequest(json_data)
+            try:
+                # the boolean flag force the parsing of POST data as JSON irrespective of the mimetype
+                json_data = request.get_json(force=True)
+                resource_creation_request = IResourceCreationRequest(json_data)
 
-            # checking if the searched resource is already present inside the DataManager
-            if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
-                return {'ERROR': "Resource already exists"}, 409
-            else:
-                self.resources_mapper.add_resource(resource_creation_request)
-                return Response(status=201, headers={
-                    "Location": request.url + "/" + resource_creation_request.get_uuid()})
+                # checking if the searched resource is already present inside the DataManager
+                if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
+                    return {'ERROR': "Resource already exists"}, 409
+                else:
+                    self.resources_mapper.add_resource(resource_creation_request)
+                    return Response(status=201, headers={
+                        "Location": request.url + "/" + resource_creation_request.get_uuid()})
 
-        except JSONDecodeError:
-            return {'ERROR': "Invalid JSON! Check the request"}, 400
+            except JSONDecodeError:
+                return {'ERROR': "Invalid JSON! Check the request"}, 400
 
         except Exception as e:
             return {'ERROR': "Generic Internal Server Error! Reason: " + str(e)}, 500

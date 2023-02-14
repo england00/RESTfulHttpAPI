@@ -24,22 +24,23 @@ class SingleResource(IRequests):
     # PUT method: updating the resource in json format
     def put(self, resource_id):
         try:
-            # the boolean flag force the parsing of PUT data as JSON irrespective of the mimetype
-            json_data = request.get_json(force=True)
-            resource_creation_request = IResourceCreationRequest(json_data)
+            try:
+                # the boolean flag force the parsing of PUT data as JSON irrespective of the mimetype
+                json_data = request.get_json(force=True)
+                resource_creation_request = IResourceCreationRequest(json_data)
 
-            # checking presence of the searched resource inside the DataManager
-            if resource_id in self.resources_mapper.get_resources():
-                if resource_creation_request.get_uuid() != resource_id:
-                    return {'ERROR': "UUID mismatch between body and resource"}, 400
+                # checking presence of the searched resource inside the DataManager
+                if resource_id in self.resources_mapper.get_resources():
+                    if resource_creation_request.get_uuid() != resource_id:
+                        return {'ERROR': "UUID mismatch between body and resource"}, 400
+                    else:
+                        self.resources_mapper.update_resource(resource_creation_request)
+                        return Response(status=201, headers={"Location": request.url})
                 else:
-                    self.resources_mapper.update_resource(resource_creation_request)
-                    return Response(status=201, headers={"Location": request.url})
-            else:
-                return {'ERROR': "Device UUID not found"}, 404
+                    return {'ERROR': "Device UUID not found"}, 404
 
-        except JSONDecodeError:
-            return {'ERROR': "Invalid JSON! Check the request"}, 400
+            except JSONDecodeError:
+                return {'ERROR': "Invalid JSON! Check the request"}, 400
 
         except Exception as e:
             return {'ERROR': "Generic Internal Server Error! Reason: " + str(e)}, 500
@@ -47,15 +48,16 @@ class SingleResource(IRequests):
     # DELETE method: removing the resource from the DataManager
     def delete(self, resource_id):
         try:
-            # checking presence of the searched resource inside the DataManager
-            if resource_id in self.resources_mapper.get_resources():
-                self.resources_mapper.remove_resource(resource_id)
-                return Response(status=204, headers={"Location": request.url})
-            else:
-                return {'ERROR': "Device UUID not found"}, 404
+            try:
+                # checking presence of the searched resource inside the DataManager
+                if resource_id in self.resources_mapper.get_resources():
+                    self.resources_mapper.remove_resource(resource_id)
+                    return Response(status=204, headers={"Location": request.url})
+                else:
+                    return {'ERROR': "Device UUID not found"}, 404
 
-        except JSONDecodeError:
-            return {'error': "Invalid JSON! Check the request"}, 400
+            except JSONDecodeError:
+                return {'ERROR': "Invalid JSON! Check the request"}, 400
 
         except Exception as e:
             return {'ERROR': "Generic Internal Server Error! Reason: " + str(e)}, 500

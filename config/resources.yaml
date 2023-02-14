@@ -7,6 +7,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   recipe_objects_types:
     uuid: "recipe_objects_types"
@@ -16,6 +17,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   recipe_end_effector_indexes:
     uuid: "recipe_end_effector_indexes"
@@ -25,6 +27,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   recipe_object_types_box_positions:
     uuid: "recipe_object_types_box_positions"
@@ -34,6 +37,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   recipe_object_types_numbers:
     uuid: "recipe_object_types_numbers"
@@ -43,6 +47,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   total_bags:
     uuid: "total_bags"
@@ -52,6 +57,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   6d_pose_estimation:
     uuid: "6d_pose_estimation"
@@ -61,6 +67,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   selected_recipe:
     uuid: "selected_recipe"
@@ -70,33 +77,37 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   placed_objects:
     uuid: "placed_objects"
     version: 1
     unit: "u"
-    topic: "placed_objects/t"
+    topic: "/placed_objects/t"
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   done_bags:
     uuid: "done_bags"
     version: 1
     unit: "u"
-    topic: "done_bags/t"
+    topic: "/done_bags/t"
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   current_object:
     uuid: "current_object"
     version: 1
     unit: "u"
-    topic: "current_object/t"
+    topic: "/current_object/t"
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   cobot_state_cycle:
     uuid: "cobot_state_cycle"
@@ -106,6 +117,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   joints_current_consumption_ma:
     uuid: "joints_current_consumption_ma"
@@ -115,6 +127,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   joints_temperature_c:
     uuid: "joints_temperature_c"
@@ -124,6 +137,7 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
 
   safety:
     uuid: "safety"
@@ -133,3 +147,4 @@ resources:
     qos: 0
     retained: False
     frequency: 1
+    value: null
