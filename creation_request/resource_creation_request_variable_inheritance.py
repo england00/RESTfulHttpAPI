@@ -1,5 +1,7 @@
 from models.device_model import DeviceModel
 
+model = None
+
 
 class IResourceCreationRequest:
     pass

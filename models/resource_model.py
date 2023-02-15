@@ -6,10 +6,11 @@ class ResourceModel(IResourceModel):
 
     def __init__(self, *args):
         self.uuid = None
+        self.name = None
         self.version = None
         self.unit = None
         self.topic = None
-        self.path = None
+        self.uri = None
         self.qos = None
         self.retained = None
         self.frequency = None
@@ -21,6 +22,9 @@ class ResourceModel(IResourceModel):
     def get_uuid(self):
         return self.uuid
 
+    def get_name(self):
+        return self.name
+
     def get_version(self):
         return self.version
 
@@ -30,8 +34,8 @@ class ResourceModel(IResourceModel):
     def get_topic(self):
         return self.topic
 
-    def get_path(self):
-        return self.path
+    def get_uri(self):
+        return self.uri
 
     def get_qos(self):
         return self.qos
@@ -48,6 +52,9 @@ class ResourceModel(IResourceModel):
     def set_uuid(self, uuid):
         self.uuid = uuid
 
+    def set_name(self, name):
+        self.name = name
+
     def set_version(self, version):
         self.version = version
 
@@ -57,8 +64,8 @@ class ResourceModel(IResourceModel):
     def set_topic(self, topic):
         self.topic = topic
 
-    def set_path(self, path):
-        self.path = path
+    def set_uri(self, uri):
+        self.uri = uri
 
     def set_qos(self, qos):
         self.qos = qos
@@ -75,10 +82,11 @@ class ResourceModel(IResourceModel):
     def __str__(self):
         return f'ResourceModel(' \
                f'{self.uuid},' \
+               f'{self.name},' \
                f'{self.version},' \
                f'{self.unit},' \
                f'{self.topic},' \
-               f'{self.path},' \
+               f'{self.uri},' \
                f'{self.qos},' \
                f'{self.retained},' \
                f'{self.frequency},' \
@@ -88,17 +96,19 @@ class ResourceModel(IResourceModel):
     def object_mapping(dictionary):
         return json.loads(json.dumps(dictionary), object_hook=ResourceModel)
 
-    def to_SQL(self):
+    @staticmethod
+    def to_SQL():
         return """
             CREATE TABLE resources (
-            uuid VARCHAR(40) NOT NULL,
+            uuid VARCHAR(100) NOT NULL,
+            name VARCHAR(100),
             version INT,
-            unit VARCHAR(10),
-            topic VARCHAR(100)
-            path VARCHAR(100),
-            qou INT, 
-            retained VARCHAR(5),
+            unit VARCHAR(100),
+            topic VARCHAR(100),
+            uri VARCHAR(100),
+            qos INT, 
+            retained VARCHAR(100),
             frequency INT,
-            value VARCHAR(40), 
+            value VARCHAR(100), 
             PRIMARY KEY (uuid));
             """

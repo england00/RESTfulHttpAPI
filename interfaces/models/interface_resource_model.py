@@ -8,6 +8,10 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_name(self):
+        pass
+
+    @abc.abstractmethod
     def get_version(self):
         pass
 
@@ -20,7 +24,7 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_path(self):
+    def get_uri(self):
         pass
 
     @abc.abstractmethod
@@ -44,6 +48,10 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def set_name(self, name):
+        pass
+
+    @abc.abstractmethod
     def set_version(self, version):
         pass
 
@@ -56,7 +64,7 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def set_path(self, path):
+    def set_uri(self, uri):
         pass
 
     @abc.abstractmethod
@@ -77,8 +85,4 @@ class IResourceModel(abc.ABC):
 
     @abc.abstractmethod
     def __str__(self):
-        pass
-
-    @abc.abstractmethod
-    def to_SQL(self):
         pass

@@ -3,163 +3,148 @@ resources:
     uuid: "start_stop_cycle"
     version: 1
     unit: "u"
-    topic: "/production/cycle/signals/start_stop"
-    path: "/production/cycle/signals"
+    topic: "/production/cycle/signals/start_stop_cycle"
+    uri: "/production/cycle/signals/start_stop_cycle"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   recipe_objects_types:
     uuid: "recipe_objects_types"
     version: 1
     unit: "u"
     topic: "/production/cycle/recipes/recipe_objects_types"
-    path: "/production/cycle/recipes"
+    uri: "/production/cycle/recipes/recipe_objects_types"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   recipe_end_effector_indexes:
     uuid: "recipe_end_effector_indexes"
     version: 1
     unit: "u"
     topic: "/production/cycle/recipes/recipe_end_effector_indexes"
-    path: "/production/cycle/recipes"
+    uri: "/production/cycle/recipes/recipe_end_effector_indexes"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   recipe_object_types_box_positions:
     uuid: "recipe_object_types_box_positions"
     version: 1
     unit: "u"
     topic: "/production/cycle/recipes/recipe_object_types_box_positions"
-    path: "/production/cycle/recipes"
+    uri: "/production/cycle/recipes/recipe_object_types_box_positions"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   recipe_object_types_numbers:
     uuid: "recipe_object_types_numbers"
     version: 1
     unit: "u"
     topic: "/production/cycle/recipes/recipe_object_types_numbers"
-    path: "/production/cycle/recipes"
+    uri: "/production/cycle/recipes/recipe_object_types_numbers"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   total_bags:
     uuid: "total_bags"
     version: 1
     unit: "u"
     topic: "/production/cycle/signals/total_bags"
-    path: "/production/cycle/signals"
+    uri: "/production/cycle/signals/total_bags"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   6d_pose_estimation:
     uuid: "6d_pose_estimation"
     version: 1
     unit: "u"
-    topic: "/ai_on_edge/cycle/6d_pose"
-    path: "/ai_on_edge/cycle"
+    topic: "/ai_on_edge/cycle/6d_pose_estimation"
+    uri: "/ai_on_edge/cycle/6d_pose_estimation"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   selected_recipe:
     uuid: "selected_recipe"
     version: 1
     unit: "u"
     topic: "/production/cycle/recipes/selected_recipe"
-    path: "/production/cycle/recipes"
+    uri: "/production/cycle/recipes/selected_recipe"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   placed_objects:
     uuid: "placed_objects"
     version: 1
     unit: "u"
     topic: "/production/cycle/signals/placed_objects"
-    path: "/production/cycle/signals"
+    uri: "/production/cycle/signals/placed_objects"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   done_bags:
     uuid: "done_bags"
     version: 1
     unit: "u"
     topic: "/production/cycle/signals/done_bags"
-    path: "/production/cycle/signals"
+    uri: "/production/cycle/signals/done_bags"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   current_object:
     uuid: "current_object"
     version: 1
     unit: "u"
     topic: "/production/cycle/signals/current_object"
-    path: "/production/cycle/signals"
+    uri: "/production/cycle/signals/current_object"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   cobot_state_cycle:
     uuid: "cobot_state_cycle"
     version: 1
     unit: "u"
-    topic: "/cobot/cycle/state"
-    path: "/cobot/cycle"
+    topic: "/cobot/cycle/cobot_state_cycle"
+    uri: "/cobot/cycle/cobot_state_cycle"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   joints_current_consumption_ma:
     uuid: "joints_current_consumption_ma"
     version: 1
     unit: "u"
     topic: "/cobot/cycle/joints_current_consumption_ma"
-    path: "/cobot/cycle"
+    uri: "/cobot/cycle/joints_current_consumption_ma"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   joints_temperature_c:
     uuid: "joints_temperature_c"
     version: 1
     unit: "u"
     topic: "/cobot/cycle/joints_temperature_c"
-    path: "/cobot/cycle"
+    uri: "/cobot/cycle/joints_temperature_c"
     qos: 0
     retained: False
     frequency: 1
-    value: null
 
   safety:
     uuid: "safety"
     version: 1
     unit: "u"
     topic: "/cobot/cycle/safety"
-    path: "/cobot/cycle"
+    uri: "/cobot/cycle/safety"
     qos: 0
     retained: False
     frequency: 1
-    value: null

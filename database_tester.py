@@ -1,4 +1,4 @@
-from database.database import MySQLDatabase
+from database.model.database import MySQLDatabase
 from models.resource_model import ResourceModel
 
 # PARAMS
@@ -10,7 +10,7 @@ charset = "utf8"
 resource_model = ResourceModel()
 
 if __name__ == "__main__":
-    myDB = MySQLDatabase(host, user, password, charset)
+    myDB = MySQLDatabase(host, user, password, charset, database)
 
     # STARTING CONNECTION
     myDB.start_connection()
