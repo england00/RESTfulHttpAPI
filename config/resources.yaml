@@ -3,7 +3,8 @@ resources:
     uuid: "start_stop_cycle"
     version: 1
     unit: "u"
-    topic: "/start_stop_cycle/c"
+    topic: "/production/cycle/signals/start_stop"
+    path: "/production/cycle/signals"
     qos: 0
     retained: False
     frequency: 1
@@ -13,7 +14,8 @@ resources:
     uuid: "recipe_objects_types"
     version: 1
     unit: "u"
-    topic: "/recipe_objects_types/c"
+    topic: "/production/cycle/recipes/recipe_objects_types"
+    path: "/production/cycle/recipes"
     qos: 0
     retained: False
     frequency: 1
@@ -23,7 +25,8 @@ resources:
     uuid: "recipe_end_effector_indexes"
     version: 1
     unit: "u"
-    topic: "/recipe_end_effector_indexes/c"
+    topic: "/production/cycle/recipes/recipe_end_effector_indexes"
+    path: "/production/cycle/recipes"
     qos: 0
     retained: False
     frequency: 1
@@ -33,7 +36,8 @@ resources:
     uuid: "recipe_object_types_box_positions"
     version: 1
     unit: "u"
-    topic: "/recipe_object_types_box_positions/c"
+    topic: "/production/cycle/recipes/recipe_object_types_box_positions"
+    path: "/production/cycle/recipes"
     qos: 0
     retained: False
     frequency: 1
@@ -43,7 +47,8 @@ resources:
     uuid: "recipe_object_types_numbers"
     version: 1
     unit: "u"
-    topic: "/recipe_object_types_numbers/c"
+    topic: "/production/cycle/recipes/recipe_object_types_numbers"
+    path: "/production/cycle/recipes"
     qos: 0
     retained: False
     frequency: 1
@@ -53,7 +58,8 @@ resources:
     uuid: "total_bags"
     version: 1
     unit: "u"
-    topic: "/total_bags/c"
+    topic: "/production/cycle/signals/total_bags"
+    path: "/production/cycle/signals"
     qos: 0
     retained: False
     frequency: 1
@@ -63,7 +69,8 @@ resources:
     uuid: "6d_pose_estimation"
     version: 1
     unit: "u"
-    topic: "/6d_pose_estimation/c"
+    topic: "/ai_on_edge/cycle/6d_pose"
+    path: "/ai_on_edge/cycle"
     qos: 0
     retained: False
     frequency: 1
@@ -74,6 +81,7 @@ resources:
     version: 1
     unit: "u"
     topic: "/production/cycle/recipes/selected_recipe"
+    path: "/production/cycle/recipes"
     qos: 0
     retained: False
     frequency: 1
@@ -83,7 +91,8 @@ resources:
     uuid: "placed_objects"
     version: 1
     unit: "u"
-    topic: "/placed_objects/t"
+    topic: "/production/cycle/signals/placed_objects"
+    path: "/production/cycle/signals"
     qos: 0
     retained: False
     frequency: 1
@@ -93,7 +102,8 @@ resources:
     uuid: "done_bags"
     version: 1
     unit: "u"
-    topic: "/done_bags/t"
+    topic: "/production/cycle/signals/done_bags"
+    path: "/production/cycle/signals"
     qos: 0
     retained: False
     frequency: 1
@@ -103,7 +113,8 @@ resources:
     uuid: "current_object"
     version: 1
     unit: "u"
-    topic: "/current_object/t"
+    topic: "/production/cycle/signals/current_object"
+    path: "/production/cycle/signals"
     qos: 0
     retained: False
     frequency: 1
@@ -113,7 +124,8 @@ resources:
     uuid: "cobot_state_cycle"
     version: 1
     unit: "u"
-    topic: "/cobot_state_cycle/t"
+    topic: "/cobot/cycle/state"
+    path: "/cobot/cycle"
     qos: 0
     retained: False
     frequency: 1
@@ -123,7 +135,8 @@ resources:
     uuid: "joints_current_consumption_ma"
     version: 1
     unit: "u"
-    topic: "/joints_current_consumption_ma/t"
+    topic: "/cobot/cycle/joints_current_consumption_ma"
+    path: "/cobot/cycle"
     qos: 0
     retained: False
     frequency: 1
@@ -133,7 +146,8 @@ resources:
     uuid: "joints_temperature_c"
     version: 1
     unit: "u"
-    topic: "/joints_temperature_c/t"
+    topic: "/cobot/cycle/joints_temperature_c"
+    path: "/cobot/cycle"
     qos: 0
     retained: False
     frequency: 1
@@ -143,7 +157,8 @@ resources:
     uuid: "safety"
     version: 1
     unit: "u"
-    topic: "/safety/t"
+    topic: "/cobot/cycle/safety"
+    path: "/cobot/cycle"
     qos: 0
     retained: False
     frequency: 1

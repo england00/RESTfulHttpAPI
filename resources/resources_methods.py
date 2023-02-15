@@ -14,9 +14,11 @@ class Resources(IRequests):
         try:
             # iterate over the dictionary to build a serializable resource list
             resource_list = []
-
             for resource in self.resources_mapper.get_resources().values():
-                resource_list.append(resource.__dict__)  # adding all the elements if there is no query
+                if resource.get_path() in request.url:
+                    resource_list.append(resource.__dict__)
+                elif request.url.endswith("/api/iot/"):
+                    resource_list.append(resource.__dict__)
 
             # checking not having an empty list
             if len(resource_list) != 0:
@@ -33,6 +35,7 @@ class Resources(IRequests):
                 # the boolean flag force the parsing of POST data as JSON irrespective of the mimetype
                 json_data = request.get_json(force=True)
                 resource_creation_request = IResourceCreationRequest(json_data)
+                resource_creation_request.set_path(request.url.split('/api/iot')[1])
 
                 # checking if the searched resource is already present inside the DataManager
                 if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():

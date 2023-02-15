@@ -16,17 +16,22 @@ print("Starting HTTP RESTful API Server ...")
 # creating an object ResourcesMapper
 resources_mapper = ResourcesMapper()  # already configured with './config/resources.yaml'
 
-# adding the Resources class for "device" to the api
-api.add_resource(Resources, ENDPOINT_PREFIX + '/resources',
-                 resource_class_kwargs={'resources_mapper': resources_mapper},
-                 endpoint="resources",
-                 methods=['GET', 'POST'])
+endpoint_path_list = [['', 'all', 'one'],
+                      ['/production/cycle/signals', 'signals', 'signal'],
+                      ['/production/cycle/recipes', 'recipes', 'recipe'],
+                      ['/ai_on_edge/cycle', 'ai_on_edge_cycles', 'ai_on_edge_cycle'],
+                      ['/cobot/cycle', 'cobot_cycles', 'cobot_cycle']]
 
-# adding the SingleResource class for "device" to the api
-api.add_resource(SingleResource, ENDPOINT_PREFIX + '/resources/<string:resource_id>',
-                 resource_class_kwargs={'resources_mapper': resources_mapper},
-                 endpoint='resource',
-                 methods=['GET', 'PUT', 'DELETE'])
+# adding Resources and SingleResource class with all the endpoints list
+for ept in endpoint_path_list:
+    api.add_resource(Resources, ENDPOINT_PREFIX + ept[0],
+                     resource_class_kwargs={'resources_mapper': resources_mapper},
+                     endpoint=ept[1],
+                     methods=['GET', 'POST'])
+    api.add_resource(SingleResource, ENDPOINT_PREFIX + ept[0] + '/<string:resource_id>',
+                     resource_class_kwargs={'resources_mapper': resources_mapper},
+                     endpoint=ept[2],
+                     methods=['GET', 'PUT', 'DELETE'])
 
 # database params
 host = "localhost"

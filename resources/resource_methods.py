@@ -28,6 +28,7 @@ class SingleResource(IRequests):
                 # the boolean flag force the parsing of PUT data as JSON irrespective of the mimetype
                 json_data = request.get_json(force=True)
                 resource_creation_request = IResourceCreationRequest(json_data)
+                resource_creation_request.set_path(request.url.split('/api/iot')[1].replace("/{}".format(resource_id), ""))
 
                 # checking presence of the searched resource inside the DataManager
                 if resource_id in self.resources_mapper.get_resources():

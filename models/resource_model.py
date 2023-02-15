@@ -9,6 +9,7 @@ class ResourceModel(IResourceModel):
         self.version = None
         self.unit = None
         self.topic = None
+        self.path = None
         self.qos = None
         self.retained = None
         self.frequency = None
@@ -28,6 +29,9 @@ class ResourceModel(IResourceModel):
 
     def get_topic(self):
         return self.topic
+
+    def get_path(self):
+        return self.path
 
     def get_qos(self):
         return self.qos
@@ -53,6 +57,9 @@ class ResourceModel(IResourceModel):
     def set_topic(self, topic):
         self.topic = topic
 
+    def set_path(self, path):
+        self.path = path
+
     def set_qos(self, qos):
         self.qos = qos
 
@@ -71,6 +78,7 @@ class ResourceModel(IResourceModel):
                f'{self.version},' \
                f'{self.unit},' \
                f'{self.topic},' \
+               f'{self.path},' \
                f'{self.qos},' \
                f'{self.retained},' \
                f'{self.frequency},' \
@@ -79,3 +87,18 @@ class ResourceModel(IResourceModel):
     @staticmethod
     def object_mapping(dictionary):
         return json.loads(json.dumps(dictionary), object_hook=ResourceModel)
+
+    def to_SQL(self):
+        return """
+            CREATE TABLE resources (
+            uuid VARCHAR(40) NOT NULL,
+            version INT,
+            unit VARCHAR(10),
+            topic VARCHAR(100)
+            path VARCHAR(100),
+            qou INT, 
+            retained VARCHAR(5),
+            frequency INT,
+            value VARCHAR(40), 
+            PRIMARY KEY (uuid));
+            """

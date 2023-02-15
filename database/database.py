@@ -53,7 +53,7 @@ class MySQLDatabase(IDatabase):
         try:
             query = "USE {}".format(database_name)
             self.cursor.execute(query)
-            print("Database creation done successfully")
+            print("Database choice done successfully")
 
         except Error as err:
             print(f"ERROR: '{err}'")
@@ -64,7 +64,7 @@ class MySQLDatabase(IDatabase):
         try:
             query = "DROP DATABASE {}".format(database_name)
             self.cursor.execute(query)
-            print("Database creation done successfully")
+            print("Database destruction done successfully")
 
         except Error as err:
             print(f"ERROR: '{err}'")

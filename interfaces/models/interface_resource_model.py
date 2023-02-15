@@ -20,6 +20,10 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_path(self):
+        pass
+
+    @abc.abstractmethod
     def get_qos(self):
         pass
 
@@ -52,6 +56,10 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def set_path(self, path):
+        pass
+
+    @abc.abstractmethod
     def set_qos(self, qos):
         pass
 
@@ -69,4 +77,8 @@ class IResourceModel(abc.ABC):
 
     @abc.abstractmethod
     def __str__(self):
+        pass
+
+    @abc.abstractmethod
+    def to_SQL(self):
         pass
