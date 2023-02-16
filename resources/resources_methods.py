@@ -15,7 +15,8 @@ class Resources(IRequests):
             # iterate over the dictionary to build a serializable resource list
             resource_list = []
             for resource in self.resources_mapper.get_resources().values():
-                if resource.get_uri().replace("/{}".format(resource.get_uuid()), "") in request.url:
+                if request.url.split('/api/iot')[1] in resource.get_uri() or \
+                        request.url.split('/api/iot')[1] in '/' + resource.get_uri():
                     resource_list.append(resource.__dict__)
                 elif request.url.endswith("/api/iot/"):
                     resource_list.append(resource.__dict__)
@@ -35,15 +36,27 @@ class Resources(IRequests):
                 # the boolean flag force the parsing of POST data as JSON irrespective of the mimetype
                 json_data = request.get_json(force=True)
                 resource_creation_request = IResourceCreationRequest(json_data)
-                resource_creation_request.set_uri(request.url.split('/api/iot')[1] + "/{}".format(resource_creation_request.get_uuid()))
 
-                # checking if the searched resource is already present inside the DataManager
+                # checking if the searched resource is already present inside the ResourcesMapper
                 if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
                     return {'ERROR': "Resource already exists"}, 409
                 else:
-                    self.resources_mapper.add_resource(resource_creation_request)
-                    return Response(status=201, headers={
-                        "Location": request.url + "/" + resource_creation_request.get_uuid()})
+                    # checking if the new resource has the url's path inside her attribute 'uri'
+                    if request.url.split('/api/iot')[1] not in resource_creation_request.get_uri() and \
+                            request.url.split('/api/iot')[1] not in '/' + resource_creation_request.get_uri():
+                        return {'ERROR': "URI mismatch between body and resource"}, 400
+                    else:
+                        if (request.url.split('/api/iot')[1] + '{}'.format(
+                            resource_creation_request.get_uri().replace('{}'.format(
+                                request.url.split('/api/iot')[1]), ''))) == resource_creation_request.get_uri() or \
+                                (request.url.split('/api/iot')[1] + '{}'.format(
+                                resource_creation_request.get_uri().replace('{}'.format(
+                                request.url.split('/api/iot')[1]), ''))) == '/' + resource_creation_request.get_uri():
+                            self.resources_mapper.add_resource(resource_creation_request)
+                            return Response(status=201, headers={
+                                "Location": request.url + "/" + resource_creation_request.get_uuid()})
+                        else:
+                            return {'ERROR': "URI mismatch between body and resource"}, 400
 
             except JSONDecodeError:
                 return {'ERROR': "Invalid JSON! Check the request"}, 400

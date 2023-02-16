@@ -43,6 +43,7 @@ class ResourcesMapper:
 
     def get_resources(self):
 
+        '''
         query = """
             SELECT *
             FROM resources
@@ -50,6 +51,7 @@ class ResourcesMapper:
         results = self.myDB.read_query(query)
         for result in results:
             print(result)
+        '''
 
         return self._resources
 
@@ -78,9 +80,9 @@ class ResourcesMapper:
         else:
             raise TypeError("Error updating the resource. Only ResourceModel objects are allowed")
 
-    def remove_resource(self, delete_resourse_id):
-        if delete_resourse_id in self._resources.keys():
-            del self._resources[delete_resourse_id]
+    def remove_resource(self, key):
+        if key in self._resources.keys():
+            del self._resources[key]
 
     # CHOOSING DATABASE
     # self.myDB.choose_database(self.myDB.choosen_database)
