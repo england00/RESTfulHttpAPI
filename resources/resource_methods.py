@@ -8,14 +8,15 @@ class SingleResource(IRequests):
 
     def __init__(self, **kwargs):
         self.resources_mapper = kwargs['resources_mapper']
+        self.endpoint = kwargs['endpoint']
 
     # GET method: obtaining the resource in json format
     def get(self, resource_id):
         try:
             # checking presence of the searched resource inside the ResourcesMapper
             for resource in self.resources_mapper.get_resources().values():
-                if request.url.split('/api/iot')[1] == resource.get_uri() or\
-                        request.url.split('/api/iot')[1] == '/' + resource.get_uri():
+                if request.url.split(self.endpoint)[1] == resource.get_uri() or\
+                        request.url.split(self.endpoint)[1] == '/' + resource.get_uri():
                     return resource.__dict__, 200  # return data and 200 OK code
             return {'ERROR': "Resource Not Found!"}, 404
 
@@ -33,8 +34,8 @@ class SingleResource(IRequests):
                 # checking if the searched resource is already present inside the ResourcesMapper
                 if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
                     # checking if the searched resource has the url's path inside her attribute 'uri'
-                    if request.url.split('/api/iot')[1] != resource_creation_request.get_uri() and\
-                            request.url.split('/api/iot')[1] != '/' + resource_creation_request.get_uri():
+                    if request.url.split(self.endpoint)[1] != resource_creation_request.get_uri() and\
+                            request.url.split(self.endpoint)[1] != '/' + resource_creation_request.get_uri():
                         return {'ERROR': "URI mismatch between body and resource"}, 400
                     else:
                         self.resources_mapper.update_resource(resource_creation_request)
@@ -55,8 +56,8 @@ class SingleResource(IRequests):
                 # checking presence of the searched resource inside the ResourcesMapper
                 for resource in self.resources_mapper.get_resources().values():
                     # checking if the searched resource has the url's path inside her attribute 'uri'
-                    if request.url.split('/api/iot')[1] == resource.get_uri() or \
-                            request.url.split('/api/iot')[1] == '/' + resource.get_uri():
+                    if request.url.split(self.endpoint)[1] == resource.get_uri() or \
+                            request.url.split(self.endpoint)[1] == '/' + resource.get_uri():
                         self.resources_mapper.remove_resource(resource.get_uuid())
                         return Response(status=204, headers={"Location": request.url})
                 return {'ERROR': "Resource Not Found!"}, 404

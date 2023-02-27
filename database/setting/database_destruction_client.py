@@ -1,4 +1,6 @@
 from database.model.database_object_manager import get_database
+from database.queries.picking_system_queries import *
+from database.queries.resource_queries import *
 
 # receiving a MySQLDatabase object
 myDB = get_database()
@@ -10,11 +12,9 @@ if __name__ == "__main__":
     # CHOOSING DATABASE
     myDB.choose_database(myDB.choosen_database)
 
-    # REMOVING TABLE
-    delete_device_table = """
-        DROP TABLE resources
-    """
-    myDB.execute_query(delete_device_table)
+    # REMOVING TABLES
+    myDB.execute_query(delete_resource_table())
+    myDB.execute_query(delete_picking_system_table())
 
     # DROPPING DATABASE
     myDB.destroy_database(myDB.choosen_database)

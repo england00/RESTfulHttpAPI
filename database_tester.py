@@ -25,7 +25,6 @@ if __name__ == "__main__":
     create_device_table = resource_model.to_SQL()
     myDB.execute_query(create_device_table)
 
-
     # REMOVING TABLE
     delete_device_table = """
         DROP TABLE resources

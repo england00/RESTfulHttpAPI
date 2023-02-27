@@ -95,20 +95,3 @@ class ResourceModel(IResourceModel):
     @staticmethod
     def object_mapping(dictionary):
         return json.loads(json.dumps(dictionary), object_hook=ResourceModel)
-
-    @staticmethod
-    def to_SQL():
-        return """
-            CREATE TABLE resources (
-            uuid VARCHAR(100) NOT NULL,
-            name VARCHAR(100),
-            version INT,
-            unit VARCHAR(100),
-            topic VARCHAR(100) NOT NULL,
-            uri VARCHAR(100) NOT NULL,
-            qos INT, 
-            retained VARCHAR(100),
-            frequency INT,
-            value VARCHAR(100), 
-            PRIMARY KEY (uuid));
-            """

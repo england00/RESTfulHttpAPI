@@ -42,21 +42,36 @@ class ResourcesMapper:
         return self._resources[key]
 
     def get_resources(self):
-
-        '''
-        query = """
-            SELECT *
-            FROM resources
-        """
-        results = self.myDB.read_query(query)
-        for result in results:
-            print(result)
-        '''
-
         return self._resources
 
     def set_resources(self, resources):
         self._resources = resources
+
+    def init_database(self):
+        if len(self._resources.values()) != 0:
+            for resource in self._resources.values():
+                adding_resource = """
+                                INSERT INTO resources 
+                                (uuid, name, version, unit, topic, uri, qos, retained, frequency, value, ) 
+                                VALUES
+                                ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');
+                            """.format(resource.get_uuid(), str(resource.get_name()).replace("'", ""),
+                                       resource.get_version(), str(resource.get_unit()).replace("'", ""),
+                                       str(resource.get_topic()).replace("'", ""),
+                                       str(resource.get_uri()).replace("'", ""),
+                                       resource.get_qos(), resource.get_retained(), resource.get_frequency(),
+                                       str(resource.get_value()).replace("'", ""), )
+
+                self.myDB.execute_query(adding_resource)
+
+        query = """
+                    SELECT *
+                    FROM resources
+                """
+        results = self.myDB.read_query(query)
+
+        for result in results:
+            print(result)
 
     def add_resource(self, new_resource):
         if isinstance(new_resource, ResourceModel):
@@ -83,6 +98,3 @@ class ResourcesMapper:
     def remove_resource(self, key):
         if key in self._resources.keys():
             del self._resources[key]
-
-    # CHOOSING DATABASE
-    # self.myDB.choose_database(self.myDB.choosen_database)

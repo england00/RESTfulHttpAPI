@@ -8,6 +8,7 @@ class Resources(IRequests):
 
     def __init__(self, **kwargs):
         self.resources_mapper = kwargs['resources_mapper']
+        self.endpoint = kwargs['endpoint']
 
     # GET method: obtaining the list in json format of all the resource which respect the query
     def get(self):
@@ -15,10 +16,10 @@ class Resources(IRequests):
             # iterate over the dictionary to build a serializable resource list
             resource_list = []
             for resource in self.resources_mapper.get_resources().values():
-                if request.url.split('/api/iot')[1] in resource.get_uri() or \
-                        request.url.split('/api/iot')[1] in '/' + resource.get_uri():
+                if request.url.split(self.endpoint)[1] in resource.get_uri() or \
+                        request.url.split(self.endpoint)[1] in '/' + resource.get_uri():
                     resource_list.append(resource.__dict__)
-                elif request.url.endswith("/api/iot/"):
+                elif request.url.endswith(self.endpoint + '/'):
                     resource_list.append(resource.__dict__)
 
             # checking not having an empty list
@@ -42,16 +43,16 @@ class Resources(IRequests):
                     return {'ERROR': "Resource already exists"}, 409
                 else:
                     # checking if the new resource has the url's path inside her attribute 'uri'
-                    if request.url.split('/api/iot')[1] not in resource_creation_request.get_uri() and \
-                            request.url.split('/api/iot')[1] not in '/' + resource_creation_request.get_uri():
+                    if request.url.split(self.endpoint)[1] not in resource_creation_request.get_uri() and \
+                            request.url.split(self.endpoint)[1] not in '/' + resource_creation_request.get_uri():
                         return {'ERROR': "URI mismatch between body and resource"}, 400
                     else:
-                        if (request.url.split('/api/iot')[1] + '{}'.format(
+                        if (request.url.split(self.endpoint)[1] + '{}'.format(
                             resource_creation_request.get_uri().replace('{}'.format(
-                                request.url.split('/api/iot')[1]), ''))) == resource_creation_request.get_uri() or \
-                                (request.url.split('/api/iot')[1] + '{}'.format(
+                                request.url.split(self.endpoint)[1]), ''))) == resource_creation_request.get_uri() or \
+                                (request.url.split(self.endpoint)[1] + '{}'.format(
                                 resource_creation_request.get_uri().replace('{}'.format(
-                                request.url.split('/api/iot')[1]), ''))) == '/' + resource_creation_request.get_uri():
+                                request.url.split(self.endpoint)[1]), ''))) == '/' + resource_creation_request.get_uri():
                             self.resources_mapper.add_resource(resource_creation_request)
                             return Response(status=201, headers={
                                 "Location": request.url + "/" + resource_creation_request.get_uuid()})

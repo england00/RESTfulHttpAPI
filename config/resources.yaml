@@ -8,7 +8,7 @@ resources:
     uri: "production/cycle/signals/start_stop_cycle"
     qos: 2
     retained: False
-    frequency: null
+    frequency: -1
 
   done_bags:
     uuid: "done_bags"
@@ -30,7 +30,7 @@ resources:
     uri: "production/cycle/signals/total_bags"
     qos: 0
     retained: False
-    frequency: null
+    frequency: -1
 
   placed_objects:
     uuid: "placed_objects"
@@ -63,7 +63,7 @@ resources:
     uri: "production/cycle/recipes/selected_recipe"
     qos: 0
     retained: False
-    frequency: null
+    frequency: -1
 
   recipe_objects_types:
     uuid: "recipe_objects_types"
@@ -74,7 +74,7 @@ resources:
     uri: "production/cycle/recipes/objects_types"
     qos: 1
     retained: False
-    frequency: null
+    frequency: -1
 
   recipe_end_effector_indexes:
     uuid: "recipe_end_effector_indexes"
@@ -85,7 +85,7 @@ resources:
     uri: "production/cycle/recipes/end_effector_indexes"
     qos: 1
     retained: False
-    frequency: null
+    frequency: -1
 
   recipe_object_types_box_positions:
     uuid: "recipe_object_types_box_positions"
@@ -96,7 +96,7 @@ resources:
     uri: "production/cycle/recipes/object_types_box_positions"
     qos: 1
     retained: False
-    frequency: null
+    frequency: -1
 
   recipe_object_types_numbers:
     uuid: "recipe_object_types_numbers"
@@ -107,7 +107,7 @@ resources:
     uri: "production/cycle/recipes/object_types_numbers"
     qos: 1
     retained: False
-    frequency: null
+    frequency: -1
 
   cobot_state_cycle:
     uuid: "cobot_state_cycle"
@@ -217,7 +217,7 @@ resources:
     uri: "ai_on_edge/inference/6d_pose_estimation"
     qos: 2
     retained: False
-    frequency: null
+    frequency: -1
 
   request_6d_pose_estimation:
     uuid: "request_6d_pose_estimation"
@@ -228,7 +228,7 @@ resources:
     uri: "ai_on_edge/inference/6d_pose_estimation"
     qos: 2
     retained: False
-    frequency: null
+    frequency: -1
 
   rgb_image:
     uuid: "rgb_image"
@@ -239,7 +239,7 @@ resources:
     uri: "ai_on_edge/image/rgb_image"
     qos: 0
     retained: False
-    frequency: null
+    frequency: -1
 
   detection_image:
     uuid: "detection_image"
@@ -250,7 +250,7 @@ resources:
     uri: "ai_on_edge/image/detection_image"
     qos: 0
     retained: False
-    frequency: null
+    frequency: -1
 
   6d_pose_estimation_image:
     uuid: "6d_pose_estimation_image"
@@ -261,7 +261,7 @@ resources:
     uri: "ai_on_edge/image/6d_pose_estimation_image"
     qos: 0
     retained: False
-    frequency: null
+    frequency: -1
 
   picking_point_image:
     uuid: "picking_point_image"
@@ -272,4 +272,4 @@ resources:
     uri: "ai_on_edge/image/picking_point_image"
     qos: 0
     retained: False
-    frequency: null
+    frequency: -1

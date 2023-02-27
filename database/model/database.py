@@ -80,7 +80,7 @@ class MySQLDatabase(IDatabase):
         except Error as err:
             print(f"ERROR: '{err}'")
 
-    # WRITING QUERY
+    # WRITING QUERIES
     def execute_query(self, query):
         self.cursor = self.connection.cursor()
         try:
