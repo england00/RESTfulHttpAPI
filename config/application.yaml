@@ -1,0 +1,5 @@
+endpoint_prefix: "/api/iot"
+localhost: "127.0.0.1"
+broadcastIp: "0.0.0.0"
+port: 7070
+ssl_context: "adhoc"

@@ -1,76 +1,67 @@
-import socket
-import requests
+import logging
+import yaml
 from flask import Flask
 from flask_restful import Api
+from error.configuration_file_error import ConfigurationFileError
 from resources.resources_methods import Resources
 from resources.resource_methods import SingleResource
 from models.picking_systems_mapper import PickingSystemsMapper
 from database.model.database import MySQLDatabase
 
-
 # -------------------------------------------------------------------------------------------------------------------- #
-# ---------------------------------------------------- # MYSQL # ----------------------------------------------------- #
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# database params
-host = "localhost"
-user = "root"
-password = "HakertzDB32!"
-charset = "utf8"
-chosen_database = "api_database"
-
-# creating a MySQLDatabase object
-myDB = MySQLDatabase(host, user, password, charset)
-
-# opening connection with MySQL and choosing the right database
-myDB.start_connection()
-myDB.choose_database(chosen_database)
-
-
-# -------------------------------------------------------------------------------------------------------------------- #
-# -------------------------------------------- # PICKING SYSTEM MAPPER # --------------------------------------------- #
+# ------------------------------------------------ # CONFIGURATION # ------------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# creating an object PickingSystemsMapper
-picking_system_mapper = PickingSystemsMapper(myDB)
+STR_DATABASE_CONFIG_FILE = "./config/database.yaml"
+STR_APPLICATION_CONFIG_FILE = "config/application.yaml"
+
+
+def configuration_loader(path):
+    try:
+        with open(path, 'r') as file:
+            params = yaml.safe_load(file)
+        return params
+    except Exception as e:
+        logging.error(str(e))
+        raise ConfigurationFileError("Error while reading configuration") from None
 
 
 # -------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------------------- # FLASK # ----------------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# creating a Flask application
-app = Flask(__name__)
-api = Api(app)
-ENDPOINT_PREFIX = "/api/iot"
-print("Starting HTTP RESTful API Server ...")
+def web_application():
+    # creating the application
+    application = Flask(__name__)
+    application_program_interface = Api(application)
+    print("Starting HTTP RESTful API Server ...")
+    return application, application_program_interface
 
-# finding all the resources_mappers, one for each picking system
-for system in picking_system_mapper.get_systems().values():
 
-    # declaring endpoint path list
-    endpoint_path_list = [['', 'all', 'single']]
-    for p in system.get_resource_path_list():
-        endpoint_path_list.append([p, 'all-' + p, 'single-' + p])
+def resource_mapping(system_mapper, application_program_interface, endpoint_prefix):
+    # finding all the resources_mappers, one for each picking system
+    for system in system_mapper.get_systems().values():
 
-    # adding Resources and SingleResource class with all the endpoints list
-    for ept in endpoint_path_list:
-        api.add_resource(Resources, ENDPOINT_PREFIX + system.get_endpoint() + ept[0],
-                         resource_class_kwargs={'resources_mapper': system.get_resource_mapper(),
-                                                'endpoint': str(ENDPOINT_PREFIX + system.get_endpoint())},
-                         endpoint=ept[1] + "-" + system.get_endpoint(),
-                         methods=['GET', 'POST'])
-        api.add_resource(SingleResource, ENDPOINT_PREFIX + system.get_endpoint() + ept[0] + '/<string:resource_id>',
-                         resource_class_kwargs={'resources_mapper': system.get_resource_mapper(),
-                                                'endpoint': str(ENDPOINT_PREFIX + system.get_endpoint())},
-                         endpoint=ept[2] + "-" + system.get_endpoint(),
-                         methods=['GET', 'PUT', 'DELETE'])
+        # declaring endpoint path list
+        endpoint_path_list = [['', 'all', 'single']]
+        for p in system.get_resource_path_list():
+            endpoint_path_list.append([p, 'all-' + p, 'single-' + p])
 
-# storing local and public IPs
-localIp = socket.gethostbyname(socket.gethostname())
-publicIp = requests.get('https://checkip.amazonaws.com').text.strip()
-localhost = "127.0.0.1"
-broadcastIp = "0.0.0.0"
+        # adding Resources and SingleResource class with all the endpoints list
+        for ept in endpoint_path_list:
+            application_program_interface.add_resource(Resources, endpoint_prefix + system.get_endpoint() + ept[0],
+                                                       resource_class_kwargs={
+                                                           'resources_mapper': system.get_resource_mapper(),
+                                                           'endpoint': str(endpoint_prefix + system.get_endpoint())},
+                                                       endpoint=ept[1] + "-" + system.get_endpoint(),
+                                                       methods=['GET', 'POST'])
+            application_program_interface.add_resource(SingleResource, endpoint_prefix + system.get_endpoint() + ept[
+                0] + '/<string:resource_id>',
+                                                       resource_class_kwargs={
+                                                           'resources_mapper': system.get_resource_mapper(),
+                                                           'endpoint': str(endpoint_prefix + system.get_endpoint())},
+                                                       endpoint=ept[2] + "-" + system.get_endpoint(),
+                                                       methods=['GET', 'PUT', 'DELETE'])
 
 
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -79,8 +70,24 @@ broadcastIp = "0.0.0.0"
 
 # executing the code (https with self-signed certificate)
 if __name__ == '__main__':
+    # loading database configuration
+    db_params = configuration_loader(STR_DATABASE_CONFIG_FILE)
+
+    # creating a MySQLDatabase object
+    myDB = MySQLDatabase(db_params["host"], db_params["user"], db_params["password"], db_params["charset"])
+
+    # opening connection with MySQL and choosing the right database
+    myDB.start_connection()
+    myDB.choose_database(db_params["chosen_database"])
+
+    # creating an object PickingSystemsMapper
+    picking_system_mapper = PickingSystemsMapper(myDB)
+
     # Flask application
-    app.run(ssl_context='adhoc', host=broadcastIp, port=7070)
+    app_params = configuration_loader(STR_APPLICATION_CONFIG_FILE)
+    app, api = web_application()
+    resource_mapping(picking_system_mapper, api, app_params["endpoint_prefix"])
+    app.run(ssl_context=app_params["ssl_context"], host=app_params["broadcastIp"], port=app_params["port"])
 
     # closing connection with MySQL
     myDB.close_connection()
