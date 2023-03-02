@@ -5,12 +5,11 @@ from interfaces.database.interface_database import IDatabase
 
 class MySQLDatabase(IDatabase):
 
-    def __init__(self, host_name, user_name, user_password, charset, choosen_database):
+    def __init__(self, host_name, user_name, user_password, charset):
         self.host_name = host_name
         self.user_name = user_name
         self.user_password = user_password
         self.charset = charset
-        self.choosen_database = choosen_database
         self.connection = None
         self.cursor = None
 

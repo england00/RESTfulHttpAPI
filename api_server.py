@@ -4,20 +4,27 @@ from flask import Flask
 from flask_restful import Api
 from resources.resources_methods import Resources
 from resources.resource_methods import SingleResource
-from database.model.database_object_manager import get_database
 from models.picking_systems_mapper import PickingSystemsMapper
+from database.model.database import MySQLDatabase
 
 
 # -------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------------------- # MYSQL # ----------------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# receiving a MySQLDatabase object
-myDB = get_database()
+# database params
+host = "localhost"
+user = "root"
+password = "HakertzDB32!"
+charset = "utf8"
+chosen_database = "api_database"
+
+# creating a MySQLDatabase object
+myDB = MySQLDatabase(host, user, password, charset)
 
 # opening connection with MySQL and choosing the right database
 myDB.start_connection()
-myDB.choose_database(myDB.choosen_database)
+myDB.choose_database(chosen_database)
 
 
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -25,7 +32,7 @@ myDB.choose_database(myDB.choosen_database)
 # -------------------------------------------------------------------------------------------------------------------- #
 
 # creating an object PickingSystemsMapper
-picking_system_mapper = PickingSystemsMapper()
+picking_system_mapper = PickingSystemsMapper(myDB)
 
 
 # -------------------------------------------------------------------------------------------------------------------- #

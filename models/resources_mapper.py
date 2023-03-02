@@ -1,18 +1,16 @@
 import logging
 import yaml
-from database.model.database_object_manager import get_database
 from database.queries.resource_queries import *
 from models.resource_model import ResourceModel
 from error.configuration_file_error import ConfigurationFileError
-
-myDB = get_database()
 
 
 class ResourcesMapper:
     _STR_RESOURCE_CONFIG_FILE = "./config/resources.yaml"
 
-    def __init__(self, config_object=None, config_file_path=None, base_topic=None, initialization=False, system_id=None):
+    def __init__(self, config_object=None, config_file_path=None, base_topic=None, initialization=False, system_id=None, database=None):
         self._resources = {}
+        self.myDB = database
 
         if not initialization and system_id is None:
 
@@ -44,7 +42,7 @@ class ResourcesMapper:
 
         else:
 
-            for resource in myDB.read_query(showing_resource_table_join_system(system_id)):
+            for resource in self.myDB.read_query(showing_resource_table_join_system(system_id)):
                 resource_model = ResourceModel()
                 resource_model.set_uuid(str(resource[0]))
                 resource_model.set_name((str(str(resource[1]).replace("[", "")).replace("]", ""))
@@ -74,18 +72,18 @@ class ResourcesMapper:
     def add_resource(self, new_resource):
         if isinstance(new_resource, ResourceModel):
             self._resources[new_resource.get_uuid()] = new_resource
-            myDB.execute_query(insert_row_resource_table(new_resource, new_resource.get_picking_system()))
+            self.myDB.execute_query(insert_row_resource_table(new_resource, new_resource.get_picking_system()))
         else:
             raise TypeError("Error adding new resource. Only ResourceModel objects are allowed")
 
     def update_resource(self, update_resource):
         if isinstance(update_resource, ResourceModel):
             self._resources[update_resource.get_uuid()] = update_resource
-            myDB.execute_query(modify_row_resource_table(update_resource))
+            self.myDB.execute_query(modify_row_resource_table(update_resource))
         else:
             raise TypeError("Error updating the resource. Only ResourceModel objects are allowed")
 
     def remove_resource(self, key):
         if key in self._resources.keys():
-            myDB.execute_query(delete_row_resource_table(self._resources[key]))
+            self.myDB.execute_query(delete_row_resource_table(self._resources[key]))
             del self._resources[key]

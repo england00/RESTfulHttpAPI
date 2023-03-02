@@ -1,22 +1,28 @@
-from database.model.database_object_manager import get_database
+from database.model.database import MySQLDatabase
 from database.queries.picking_system_queries import *
 from database.queries.resource_queries import *
 from models.resources_mapper import ResourcesMapper
 
-# receiving a MySQLDatabase object
-myDB = get_database()
+# database params
+host = "localhost"
+user = "root"
+password = "HakertzDB32!"
+charset = "utf8"
+chosen_database = "api_database"
+
+# creating a MySQLDatabase object
+myDB = MySQLDatabase(host, user, password, charset)
 
 if __name__ == "__main__":
-    myDB = get_database()
 
     # STARTING CONNECTION
     myDB.start_connection()
 
     # DATABASE CREATION
-    myDB.create_database(myDB.choosen_database)
+    myDB.create_database(chosen_database)
 
     # CHOOSING DATABASE
-    myDB.choose_database(myDB.choosen_database)
+    myDB.choose_database(chosen_database)
 
     # TABLE CREATION
     myDB.execute_query(create_picking_system_table())
@@ -25,15 +31,15 @@ if __name__ == "__main__":
 
     # INSERTING ROWS IN PICKING SYSTEM TABLE
     system1 = PickingSystemModel(pick_and_place_id='000001', endpoint='/000001',
-                                 resource_mapper=ResourcesMapper(config_file_path="../../config/resources.yaml"))
+                                 resource_mapper=ResourcesMapper(config_file_path="../../config/resources.yaml", database=myDB))
     myDB.execute_query(insert_row_picking_system_table(system1))
 
     system2 = PickingSystemModel(pick_and_place_id='000002', endpoint='/000002',
-                                 resource_mapper=ResourcesMapper(config_file_path="../../config/resources.yaml"))
+                                 resource_mapper=ResourcesMapper(config_file_path="../../config/resources.yaml", database=myDB))
     myDB.execute_query(insert_row_picking_system_table(system2))
 
     system3 = PickingSystemModel(pick_and_place_id='000003', endpoint='/pippo',
-                                 resource_mapper=ResourcesMapper(config_file_path="../../config/resources.yaml"))
+                                 resource_mapper=ResourcesMapper(config_file_path="../../config/resources.yaml", database=myDB))
     myDB.execute_query(insert_row_picking_system_table(system3))
 
     # INSERTING ROWS IN RESOURCE TABLE
