@@ -38,26 +38,30 @@ class Resources(IRequests):
                 json_data = request.get_json(force=True)
                 resource_creation_request = IResourceCreationRequest(json_data)
 
-                # checking if the searched resource is already present inside the ResourcesMapper
-                if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
-                    return {'ERROR': "Resource already exists"}, 409
+                # checking if the searched resource has the right 'picking_system' attribute value
+                if resource_creation_request.get_picking_system() not in self.endpoint:
+                    return {'ERROR': "URI mismatch between body and resource"}, 400
                 else:
-                    # checking if the new resource has the url's path inside her attribute 'uri'
-                    if request.url.split(self.endpoint)[1] not in resource_creation_request.get_uri() and \
-                            request.url.split(self.endpoint)[1] not in '/' + resource_creation_request.get_uri():
-                        return {'ERROR': "URI mismatch between body and resource"}, 400
+                    # checking if the searched resource is already present inside the ResourcesMapper
+                    if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
+                        return {'ERROR': "Resource already exists"}, 409
                     else:
-                        if (request.url.split(self.endpoint)[1] + '{}'.format(
-                            resource_creation_request.get_uri().replace('{}'.format(
-                                request.url.split(self.endpoint)[1]), ''))) == resource_creation_request.get_uri() or \
-                                (request.url.split(self.endpoint)[1] + '{}'.format(
-                                resource_creation_request.get_uri().replace('{}'.format(
-                                request.url.split(self.endpoint)[1]), ''))) == '/' + resource_creation_request.get_uri():
-                            self.resources_mapper.add_resource(resource_creation_request)
-                            return Response(status=201, headers={
-                                "Location": request.url + "/" + resource_creation_request.get_uuid()})
-                        else:
+                        # checking if the new resource has the url's path inside her attribute 'uri'
+                        if request.url.split(self.endpoint)[1] not in resource_creation_request.get_uri() and \
+                                request.url.split(self.endpoint)[1] not in '/' + resource_creation_request.get_uri():
                             return {'ERROR': "URI mismatch between body and resource"}, 400
+                        else:
+                            if (request.url.split(self.endpoint)[1] + '{}'.format(
+                                resource_creation_request.get_uri().replace('{}'.format(
+                                    request.url.split(self.endpoint)[1]), ''))) == resource_creation_request.get_uri() or \
+                                    (request.url.split(self.endpoint)[1] + '{}'.format(
+                                    str('/' + resource_creation_request.get_uri()).replace('{}'.format(
+                                    request.url.split(self.endpoint)[1]), ''))) == '/' + resource_creation_request.get_uri():
+                                self.resources_mapper.add_resource(resource_creation_request)
+                                return Response(status=201, headers={
+                                    "Location": request.url + "/" + resource_creation_request.get_uuid()})
+                            else:
+                                return {'ERROR': "URI mismatch between body and resource"}, 400
 
             except JSONDecodeError:
                 return {'ERROR': "Invalid JSON! Check the request"}, 400

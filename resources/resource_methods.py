@@ -31,17 +31,21 @@ class SingleResource(IRequests):
                 json_data = request.get_json(force=True)
                 resource_creation_request = IResourceCreationRequest(json_data)
 
-                # checking if the searched resource is already present inside the ResourcesMapper
-                if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
-                    # checking if the searched resource has the url's path inside her attribute 'uri'
-                    if request.url.split(self.endpoint)[1] != resource_creation_request.get_uri() and\
-                            request.url.split(self.endpoint)[1] != '/' + resource_creation_request.get_uri():
-                        return {'ERROR': "URI mismatch between body and resource"}, 400
-                    else:
-                        self.resources_mapper.update_resource(resource_creation_request)
-                        return Response(status=201, headers={"Location": request.url})
+                # checking if the searched resource has the right 'picking_system' attribute value
+                if resource_creation_request.get_picking_system() not in self.endpoint:
+                    return {'ERROR': "URI mismatch between body and resource"}, 400
                 else:
-                    return {'ERROR': "Resource UUID not found"}, 404
+                    # checking if the searched resource is already present inside the ResourcesMapper
+                    if resource_creation_request.get_uuid() in self.resources_mapper.get_resources().keys():
+                        # checking if the searched resource has the url's path inside her attribute 'uri'
+                        if request.url.split(self.endpoint)[1] != resource_creation_request.get_uri() and\
+                                request.url.split(self.endpoint)[1] != '/' + resource_creation_request.get_uri():
+                            return {'ERROR': "URI mismatch between body and resource"}, 400
+                        else:
+                            self.resources_mapper.update_resource(resource_creation_request)
+                            return Response(status=201, headers={"Location": request.url})
+                    else:
+                        return {'ERROR': "Resource UUID not found"}, 404
 
             except JSONDecodeError:
                 return {'ERROR': "Invalid JSON! Check the request"}, 400

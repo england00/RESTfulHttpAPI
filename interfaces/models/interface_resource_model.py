@@ -44,6 +44,10 @@ class IResourceModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_picking_system(self):
+        pass
+
+    @abc.abstractmethod
     def set_uuid(self, uuid):
         pass
 
@@ -81,6 +85,10 @@ class IResourceModel(abc.ABC):
 
     @abc.abstractmethod
     def set_value(self, value):
+        pass
+
+    @abc.abstractmethod
+    def set_picking_system(self, picking_system):
         pass
 
     @abc.abstractmethod

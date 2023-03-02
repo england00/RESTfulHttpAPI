@@ -15,6 +15,7 @@ class ResourceModel(IResourceModel):
         self.retained = None
         self.frequency = None
         self.value = None
+        self.picking_system = None
 
         if len(args) > 0 and isinstance(args[0], dict):
             vars(self).update(args[0])
@@ -49,6 +50,9 @@ class ResourceModel(IResourceModel):
     def get_value(self):
         return self.value
 
+    def get_picking_system(self):
+        return self.picking_system
+
     def set_uuid(self, uuid):
         self.uuid = uuid
 
@@ -79,6 +83,9 @@ class ResourceModel(IResourceModel):
     def set_value(self, value):
         self.value = value
 
+    def set_picking_system(self, picking_system):
+        self.picking_system = picking_system
+
     def __str__(self):
         return f'ResourceModel(' \
                f'{self.uuid},' \
@@ -90,7 +97,8 @@ class ResourceModel(IResourceModel):
                f'{self.qos},' \
                f'{self.retained},' \
                f'{self.frequency},' \
-               f'{self.value})'
+               f'{self.value},' \
+               f'{self.picking_system})'
 
     @staticmethod
     def object_mapping(dictionary):

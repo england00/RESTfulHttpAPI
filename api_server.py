@@ -5,8 +5,6 @@ from flask_restful import Api
 from resources.resources_methods import Resources
 from resources.resource_methods import SingleResource
 from database.model.database_object_manager import get_database
-from models.picking_system_model import PickingSystemModel
-from models.resources_mapper import ResourcesMapper
 from models.picking_systems_mapper import PickingSystemsMapper
 
 
@@ -26,16 +24,8 @@ myDB.choose_database(myDB.choosen_database)
 # -------------------------------------------- # PICKING SYSTEM MAPPER # --------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# creating a pair of PickingSystemModel object
-system001 = PickingSystemModel(pick_and_place_id='000001', endpoint='/000001', resource_mapper=ResourcesMapper())
-system002 = PickingSystemModel(pick_and_place_id='000002', endpoint='/000002', resource_mapper=ResourcesMapper())
-system003 = PickingSystemModel(pick_and_place_id='000003', endpoint='/pippo', resource_mapper=ResourcesMapper())
-
 # creating an object PickingSystemsMapper
 picking_system_mapper = PickingSystemsMapper()
-picking_system_mapper.add_system(system001)
-picking_system_mapper.add_system(system002)
-picking_system_mapper.add_system(system003)
 
 
 # -------------------------------------------------------------------------------------------------------------------- #
