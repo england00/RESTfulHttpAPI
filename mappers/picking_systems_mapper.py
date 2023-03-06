@@ -1,5 +1,5 @@
 from database.queries.picking_system_queries import *
-from models.resources_mapper import ResourcesMapper
+from mappers.resources_mapper import ResourcesMapper
 
 
 class PickingSystemsMapper:

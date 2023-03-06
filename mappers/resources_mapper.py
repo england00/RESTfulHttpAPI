@@ -6,7 +6,7 @@ from error.configuration_file_error import ConfigurationFileError
 
 
 class ResourcesMapper:
-    _STR_RESOURCE_CONFIG_FILE = "./config/resources.yaml"
+    _STR_RESOURCE_CONFIG_FILE = "./config/file/resources.yaml"
 
     def __init__(self, config_object=None, config_file_path=None, base_topic=None, initialization=False, system_id=None, database=None):
         self._resources = {}

@@ -1,29 +1,17 @@
-import logging
-import yaml
 from flask import Flask
 from flask_restful import Api
-from error.configuration_file_error import ConfigurationFileError
+from config.method.configuration_loader import yaml_loader
 from resources.resources_methods import Resources
 from resources.resource_methods import SingleResource
-from models.picking_systems_mapper import PickingSystemsMapper
+from mappers.picking_systems_mapper import PickingSystemsMapper
 from database.model.database import MySQLDatabase
 
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------------ # CONFIGURATION # ------------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 
-STR_DATABASE_CONFIG_FILE = "./config/database.yaml"
-STR_APPLICATION_CONFIG_FILE = "config/application.yaml"
-
-
-def configuration_loader(path):
-    try:
-        with open(path, 'r') as file:
-            params = yaml.safe_load(file)
-        return params
-    except Exception as e:
-        logging.error(str(e))
-        raise ConfigurationFileError("Error while reading configuration") from None
+STR_DATABASE_CONFIG_FILE = "config/file/database.yaml"
+STR_APPLICATION_CONFIG_FILE = "config/file/application.yaml"
 
 
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -71,7 +59,7 @@ def resource_mapping(system_mapper, application_program_interface, endpoint_pref
 # executing the code (https with self-signed certificate)
 if __name__ == '__main__':
     # loading database configuration
-    db_params = configuration_loader(STR_DATABASE_CONFIG_FILE)
+    db_params = yaml_loader(STR_DATABASE_CONFIG_FILE)
 
     # creating a MySQLDatabase object
     myDB = MySQLDatabase(db_params["host"], db_params["user"], db_params["password"], db_params["charset"])
@@ -84,7 +72,7 @@ if __name__ == '__main__':
     picking_system_mapper = PickingSystemsMapper(myDB)
 
     # Flask application
-    app_params = configuration_loader(STR_APPLICATION_CONFIG_FILE)
+    app_params = yaml_loader(STR_APPLICATION_CONFIG_FILE)
     app, api = web_application()
     resource_mapping(picking_system_mapper, api, app_params["endpoint_prefix"], myDB)
     app.run(ssl_context=app_params["ssl_context"], host=app_params["broadcastIp"], port=app_params["port"])
