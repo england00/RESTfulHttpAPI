@@ -2,7 +2,7 @@ import abc
 from flask_restful import Resource
 
 
-class IRequests(Resource):
+class IResource(Resource):
 
     @abc.abstractmethod
     def get(self, resource_id):

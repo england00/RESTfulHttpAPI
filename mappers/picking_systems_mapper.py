@@ -27,8 +27,8 @@ class PickingSystemsMapper:
             if newPickingSystem.get_pick_and_place_id() in self.picking_system_dictionary.keys():
                 raise TypeError("ERROR adding new system! This ID already exists!")
             else:
-                self.picking_system_dictionary[newPickingSystem.pick_and_place_id] = newPickingSystem
                 self.myDB.execute_query(insert_row_picking_system_table(newPickingSystem))
+                self.picking_system_dictionary[newPickingSystem.pick_and_place_id] = newPickingSystem
         else:
             raise TypeError("ERROR adding new device! Only PickingSystemModel are allowed!")
 
@@ -38,8 +38,8 @@ class PickingSystemsMapper:
                 self.picking_system_dictionary[updatedPickingSystem.pick_and_place_id] = updatedPickingSystem
             else:
                 raise TypeError("ERROR updating the system! This ID doesn't exists!")
-            self.picking_system_dictionary[updatedPickingSystem.pick_and_place_id] = updatedPickingSystem
             self.myDB.execute_query(modify_row_picking_system_table(updatedPickingSystem))
+            self.picking_system_dictionary[updatedPickingSystem.pick_and_place_id] = updatedPickingSystem
         else:
             raise TypeError("ERROR updating the device! Only PickingSystemModel are allowed!")
 

@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_restful import Api
 from config.method.configuration_loader import yaml_loader
-from resources.resources_methods import Resources
-from resources.resource_methods import SingleResource
+from methods.resources_discovery import ResourcesDiscovery
+from methods.resources import Resources
+from methods.resource import SingleResource
 from mappers.picking_systems_mapper import PickingSystemsMapper
 from database.model.database import MySQLDatabase
 
@@ -27,12 +28,19 @@ def web_application():
 
 
 def resource_mapping(system_mapper, application_program_interface, endpoint_prefix, database):
-    # finding all the resources lists, each one for each picking system
-    for system in system_mapper.get_systems().values():
+    # systems discovery
+    application_program_interface.add_resource(ResourcesDiscovery, endpoint_prefix,
+                                               resource_class_kwargs={
+                                                   'system_mapper': system_mapper,
+                                                   'endpoint': endpoint_prefix},
+                                               endpoint="all-systems",
+                                               methods=['GET'])
 
+    # finding all the methods lists, each one for each picking system
+    for system in system_mapper.get_systems().values():
         # declaring endpoint path list
         endpoint_path_list = [['', 'all', 'single']]
-        for p in system.get_resource_path_list():
+        for p in system.get_path_list():
             endpoint_path_list.append([p, 'all-' + p, 'single-' + p])
 
         # adding Resources and SingleResource class with all the endpoints list

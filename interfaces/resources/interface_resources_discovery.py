@@ -2,12 +2,8 @@ import abc
 from flask_restful import Resource
 
 
-class IRequests(Resource):
+class IResourcesDiscovery(Resource):
 
     @abc.abstractmethod
     def get(self):
-        pass
-
-    @abc.abstractmethod
-    def post(self):
         pass

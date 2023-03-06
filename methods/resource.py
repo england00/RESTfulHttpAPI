@@ -1,11 +1,11 @@
 from creation_request.resource_creation_request import IResourceCreationRequest
 from database.queries.resource_queries import *
-from interfaces.resources.interface_resource_methods import IRequests
+from interfaces.resources.interface_resource import IResource
 from json import JSONDecodeError
 from flask import request, Response
 
 
-class SingleResource(IRequests):
+class SingleResource(IResource):
 
     def __init__(self, **kwargs):
         self.endpoint = kwargs['endpoint']

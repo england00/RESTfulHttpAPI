@@ -16,6 +16,10 @@ class IPickingSystemModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_path_list(self):
+        pass
+
+    @abc.abstractmethod
     def get_resource_path_list(self):
         pass
 
@@ -32,5 +36,17 @@ class IPickingSystemModel(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def set_path_list(self, path_list):
+        pass
+
+    @abc.abstractmethod
     def set_resource_path_list(self, resource_path_list):
+        pass
+
+    @abc.abstractmethod
+    def obtaining_path_list(self):
+        pass
+
+    @abc.abstractmethod
+    def obtaining_resource_path_list(self):
         pass
