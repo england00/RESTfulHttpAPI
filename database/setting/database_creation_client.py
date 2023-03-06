@@ -74,21 +74,5 @@ if __name__ == "__main__":
     for resource in system1.get_resource_mapper().get_resources().values():
         myDB.execute_query(insert_row_resource_table(resource, system3))
 
-    # PRINTING SYSTEMS TABLE
-    # SYSTEM1
-    list1 = myDB.read_query(showing_resource_table_join_system('000001'))
-    for resource in list1:
-        print(resource)
-
-    # SYSTEM2
-    list2 = myDB.read_query(showing_resource_table_join_system('000002'))
-    for resource in list2:
-        print(resource)
-
-    # SYSTEM3
-    list3 = myDB.read_query(showing_resource_table_join_system('000003'))
-    for resource in list3:
-        print(resource)
-
     # CLOSING CONNECTION
     myDB.close_connection()

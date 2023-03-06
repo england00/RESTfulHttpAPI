@@ -16,7 +16,7 @@ def create_resource_table():
         frequency INT,
         value VARCHAR(100), 
         picking_system VARCHAR(100) NOT NULL,
-        PRIMARY KEY (uuid, picking_system));
+        PRIMARY KEY (uuid, uri, picking_system));
         """
 
 
@@ -24,16 +24,15 @@ def relation_resource_and_picking_system_table():
     return """
         ALTER TABLE resource
         ADD FOREIGN KEY(picking_system)
-        REFERENCES picking_system(pick_and_place_id)
-        ON DELETE SET NULL;
+        REFERENCES picking_system(pick_and_place_id);
         """
 
 
-def showing_resource_table_join_system(system_name):
-    return """SELECT * 
+def showing_resource_table_join_system(column, system_name):
+    return """SELECT {} 
               FROM resource
-              WHERE picking_system = {}
-           """.format(str(system_name))
+              WHERE picking_system = '{}'
+           """.format(str(column), str(system_name))
 
 
 def insert_row_resource_table(resource, system):
@@ -93,3 +92,32 @@ def delete_resource_table():
     return """
         DROP TABLE resource
         """
+
+
+def check_resource(column, uri, endpoint):
+    return """SELECT {}
+              FROM resource
+              WHERE (uri = '{}' AND picking_system = '{}')
+              """.format(str(column), str(uri), str(endpoint))
+
+
+def from_db_row_to_object(resource):
+    resource_model = ResourceModel()
+    resource_model.set_uuid(str(resource[0]))
+    resource_model.set_name((str(str(resource[1]).replace("[", "")).replace("]", ""))
+                            .replace(" ", "").split(','))
+    resource_model.set_version(float(resource[2]))
+    resource_model.set_unit((str(str(resource[3]).replace("[", "")).replace("]", ""))
+                            .replace(" ", "").split(','))
+    resource_model.set_topic(str(resource[4]))
+    resource_model.set_uri(str(resource[5]))
+    resource_model.set_qos(int(resource[6]))
+    if resource[7] == "True":
+        resource_model.set_retained(True)
+    else:
+        resource_model.set_retained(False)
+    resource_model.set_frequency(int(resource[8]))
+    resource_model.set_value((str(str(resource[9]).replace("[", "")).replace("]", ""))
+                             .replace(" ", "").split(','))
+    resource_model.set_picking_system(str(resource[10]))
+    return resource_model

@@ -38,8 +38,8 @@ def web_application():
     return application, application_program_interface
 
 
-def resource_mapping(system_mapper, application_program_interface, endpoint_prefix):
-    # finding all the resources_mappers, one for each picking system
+def resource_mapping(system_mapper, application_program_interface, endpoint_prefix, database):
+    # finding all the resources lists, each one for each picking system
     for system in system_mapper.get_systems().values():
 
         # declaring endpoint path list
@@ -51,15 +51,15 @@ def resource_mapping(system_mapper, application_program_interface, endpoint_pref
         for ept in endpoint_path_list:
             application_program_interface.add_resource(Resources, endpoint_prefix + system.get_endpoint() + ept[0],
                                                        resource_class_kwargs={
-                                                           'resources_mapper': system.get_resource_mapper(),
-                                                           'endpoint': str(endpoint_prefix + system.get_endpoint())},
+                                                           'endpoint': str(endpoint_prefix + system.get_endpoint()),
+                                                           'database': database},
                                                        endpoint=ept[1] + "-" + system.get_endpoint(),
                                                        methods=['GET', 'POST'])
             application_program_interface.add_resource(SingleResource, endpoint_prefix + system.get_endpoint() + ept[
                 0] + '/<string:resource_id>',
                                                        resource_class_kwargs={
-                                                           'resources_mapper': system.get_resource_mapper(),
-                                                           'endpoint': str(endpoint_prefix + system.get_endpoint())},
+                                                           'endpoint': str(endpoint_prefix + system.get_endpoint()),
+                                                           'database': database},
                                                        endpoint=ept[2] + "-" + system.get_endpoint(),
                                                        methods=['GET', 'PUT', 'DELETE'])
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     # Flask application
     app_params = configuration_loader(STR_APPLICATION_CONFIG_FILE)
     app, api = web_application()
-    resource_mapping(picking_system_mapper, api, app_params["endpoint_prefix"])
+    resource_mapping(picking_system_mapper, api, app_params["endpoint_prefix"], myDB)
     app.run(ssl_context=app_params["ssl_context"], host=app_params["broadcastIp"], port=app_params["port"])
 
     # closing connection with MySQL

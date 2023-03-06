@@ -21,6 +21,17 @@ resources:
     retained: False
     frequency: 500
 
+  done_bag:
+    uuid: "done_bag"
+    version: 1
+    name: ["done_bag"]
+    unit: ["count"]
+    topic: "production/cycle/signals/done_bag"
+    uri: "production/cycle/signals/done_bag"
+    qos: 2
+    retained: False
+    frequency: 500
+
   total_bags:
     uuid: "total_bags"
     version: 1
@@ -42,6 +53,50 @@ resources:
     qos: 0
     retained: False
     frequency: 500
+
+  actual_done_bags:
+    uuid: "actual_done_bags"
+    version: 1
+    name: ["actual_done_bags"]
+    unit: ["count"]
+    topic: "production/cycle/signals/actual_done_bags"
+    uri: "production/cycle/signals/actual_done_bags"
+    qos: 2
+    retained: False
+    frequency: -1
+
+  actual_placed_objects:
+    uuid: "actual_placed_objects"
+    version: 1
+    name: ["actual_placed_objects"]
+    unit: ["count"]
+    topic: "production/cycle/signals/actual_placed_objects"
+    uri: "production/cycle/signals/actual_placed_objects"
+    qos: 2
+    retained: False
+    frequency: -1
+
+  actual_lost_objects:
+    uuid: "actual_lost_objects"
+    version: 1
+    name: ["actual_lost_objects"]
+    unit: ["count"]
+    topic: "production/cycle/signals/actual_lost_objects"
+    uri: "production/cycle/signals/actual_lost_objects"
+    qos: 2
+    retained: False
+    frequency: -1
+
+  cycle_time:
+    uuid: "cycle_time"
+    version: 1
+    name: ["cycle_time"]
+    unit: ["s"]
+    topic: "production/cycle/time"
+    uri: "production/cycle/time"
+    qos: 2
+    retained: False
+    frequency: -1
 
   current_object:
     uuid: "current_object"
@@ -68,8 +123,8 @@ resources:
   recipe_objects_types:
     uuid: "recipe_objects_types"
     version: 1
-    name: ["type", "type", "type"]
-    unit: ["B", "B", "B"]
+    name: ["type"]
+    unit: ["B"]
     topic: "production/cycle/recipes/objects_types"
     uri: "production/cycle/recipes/objects_types"
     qos: 1
@@ -79,8 +134,8 @@ resources:
   recipe_end_effector_indexes:
     uuid: "recipe_end_effector_indexes"
     version: 1
-    name: ["index", "index", "index"]
-    unit: ["count", "count", "count"]
+    name: ["index"]
+    unit: ["count"]
     topic: "production/cycle/recipes/end_effector_indexes"
     uri: "production/cycle/recipes/end_effector_indexes"
     qos: 1
@@ -101,8 +156,8 @@ resources:
   recipe_object_types_numbers:
     uuid: "recipe_object_types_numbers"
     version: 1
-    name: ["number", "number", "number"]
-    unit: ["count", "count", "count"]
+    name: ["number"]
+    unit: ["count"]
     topic: "production/cycle/recipes/object_types_numbers"
     uri: "production/cycle/recipes/object_types_numbers"
     qos: 1
@@ -153,11 +208,22 @@ resources:
     retained: False
     frequency: 500
 
+  alarm_counter:
+    uuid: "alarm_counter"
+    version: 1
+    name: ["alarm_counter"]
+    unit: ["count"]
+    topic: "cobot/states/alarm_counter"
+    uri: "cobot/states/alarm_counter"
+    qos: 2
+    retained: False
+    frequency: -1
+
   joint_angles:
     uuid: "joint_angles"
     version: 1
     name: ["base", "shoulder", "elbow", "wrist_1", "wrist_2", "wrist_3"]
-    unit: ["mrad", "mrad", "mrad", "mrad", "mrad", "mrad"]
+    unit: ["mrad"]
     topic: "cobot/joints/sensors/angles"
     uri: "cobot/joints/sensors/angles"
     qos: 0
@@ -168,7 +234,7 @@ resources:
     uuid: "joint_angle_velocities"
     version: 1
     name: ["base", "shoulder", "elbow", "wrist_1", "wrist_2", "wrist_3"]
-    unit: ["mrads", "mrads", "mrads", "mrads", "mrads", "mrads"]
+    unit: ["mrads"]
     topic: "cobot/joints/sensors/velocities"
     uri: "cobot/joints/sensors/velocities"
     qos: 0
@@ -179,7 +245,7 @@ resources:
     uuid: "joint_current_consumptions"
     version: 1
     name: ["base", "shoulder", "elbow", "wrist_1", "wrist_2", "wrist_3"]
-    unit: ["mA", "mA", "mA", "mA", "mA", "mA"]
+    unit: ["mA"]
     topic: "cobot/joints/sensors/current_consumptions"
     uri: "cobot/joints/sensors/current_consumptions"
     qos: 0
@@ -190,7 +256,7 @@ resources:
     uuid: "joint_temperatures"
     version: 1
     name: ["base", "shoulder", "elbow", "wrist_1", "wrist_2", "wrist_3"]
-    unit: ["Cel", "Cel", "Cel", "Cel", "Cel", "Cel"]
+    unit: ["Cel"]
     topic: "cobot/joints/sensors/temperatures"
     uri: "cobot/joints/sensors/temperatures"
     qos: 0
@@ -225,7 +291,40 @@ resources:
     name: ["request_6d_pose_estimation"]
     unit: ["bit"]
     topic: "ai_on_edge/inference/6d_pose_estimation"
-    uri: "ai_on_edge/inference/6d_pose_estimation"
+    uri: "ai_on_edge/inference/request_6d_pose_estimation"
+    qos: 2
+    retained: False
+    frequency: -1
+
+  confidence:
+    uuid: "confidence"
+    version: 1
+    name: ["score"]
+    unit: ["%"]
+    topic: "ai_on_edge/inference/scores/confidence"
+    uri: "ai_on_edge/inference/scores/confidence"
+    qos: 2
+    retained: False
+    frequency: -1
+
+  cosine_similarity:
+    uuid: "cosine_similarity"
+    version: 1
+    name: ["score"]
+    unit: ["%"]
+    topic: "ai_on_edge/inference/scores/cosine_similarity"
+    uri: "ai_on_edge/inference/scores/cosine_similarity"
+    qos: 2
+    retained: False
+    frequency: -1
+
+  inference_time:
+    uuid: "inference_time"
+    version: 1
+    name: ["inference_time"]
+    unit: ["s"]
+    topic: "ai_on_edge/inference/time"
+    uri: "ai_on_edge/inference/time"
     qos: 2
     retained: False
     frequency: -1
