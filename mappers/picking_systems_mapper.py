@@ -35,11 +35,10 @@ class PickingSystemsMapper:
     def update_system(self, updatedPickingSystem):
         if isinstance(updatedPickingSystem, PickingSystemModel):  # check data type
             if updatedPickingSystem.get_pick_and_place_id() in self.picking_system_dictionary.keys():
+                self.myDB.execute_query(modify_row_picking_system_table(updatedPickingSystem))
                 self.picking_system_dictionary[updatedPickingSystem.pick_and_place_id] = updatedPickingSystem
             else:
                 raise TypeError("ERROR updating the system! This ID doesn't exists!")
-            self.myDB.execute_query(modify_row_picking_system_table(updatedPickingSystem))
-            self.picking_system_dictionary[updatedPickingSystem.pick_and_place_id] = updatedPickingSystem
         else:
             raise TypeError("ERROR updating the device! Only PickingSystemModel are allowed!")
 
