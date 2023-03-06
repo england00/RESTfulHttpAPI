@@ -47,7 +47,7 @@ if __name__ == "__main__":
                                                                  database=myDB))
     myDB.execute_query(insert_row_picking_system_table(system2))
 
-    system3 = PickingSystemModel(pick_and_place_id='000003', endpoint='/pippo',
+    system3 = PickingSystemModel(pick_and_place_id='000003', endpoint='/000003',
                                  resource_mapper=ResourcesMapper(config_file_path="../../config/file/resources.yaml",
                                                                  database=myDB))
     myDB.execute_query(insert_row_picking_system_table(system3))

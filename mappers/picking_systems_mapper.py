@@ -7,7 +7,9 @@ class PickingSystemsMapper:
     def __init__(self, database):
         self.picking_system_dictionary = {}
         self.myDB = database
+        self.read_from_db()
 
+    def read_from_db(self):
         for system in self.myDB.read_query(showing_picking_system_table()):
             picking_system_model = PickingSystemModel(pick_and_place_id=str(system[0]),
                                                       endpoint=str(system[1]),
@@ -17,6 +19,7 @@ class PickingSystemsMapper:
             self.picking_system_dictionary[picking_system_model.pick_and_place_id] = picking_system_model
 
     def get_systems(self):
+        self.read_from_db()
         return self.picking_system_dictionary
 
     def add_system(self, newPickingSystem):
