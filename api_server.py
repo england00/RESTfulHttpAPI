@@ -27,7 +27,7 @@ def web_application():
     return application, application_program_interface
 
 
-def resource_mapping(system_mapper, application_program_interface, endpoint_prefix, database):
+def resource_mapping(system_mapper, application_program_interface, endpoint_prefix, database, enable_writing):
     # systems discovery
     application_program_interface.add_resource(ResourcesDiscovery, endpoint_prefix,
                                                resource_class_kwargs={
@@ -48,14 +48,16 @@ def resource_mapping(system_mapper, application_program_interface, endpoint_pref
             application_program_interface.add_resource(Resources, endpoint_prefix + system.get_endpoint() + ept[0],
                                                        resource_class_kwargs={
                                                            'endpoint': str(endpoint_prefix + system.get_endpoint()),
-                                                           'database': database},
+                                                           'database': database,
+                                                           'enable_writing': enable_writing},
                                                        endpoint=ept[1] + "-" + system.get_endpoint(),
                                                        methods=['GET', 'POST'])
             application_program_interface.add_resource(SingleResource, endpoint_prefix + system.get_endpoint() + ept[
                 0] + '/<string:resource_id>',
                                                        resource_class_kwargs={
                                                            'endpoint': str(endpoint_prefix + system.get_endpoint()),
-                                                           'database': database},
+                                                           'database': database,
+                                                           'enable_writing': enable_writing},
                                                        endpoint=ept[2] + "-" + system.get_endpoint(),
                                                        methods=['GET', 'PUT', 'DELETE'])
 
@@ -77,12 +79,12 @@ if __name__ == '__main__':
     myDB.choose_database(db_params["chosen_database"])
 
     # creating an object PickingSystemsMapper
-    picking_system_mapper = PickingSystemsMapper(myDB)
+    picking_system_mapper = PickingSystemsMapper(database=myDB)
 
     # Flask application
     app_params = yaml_loader(STR_APPLICATION_CONFIG_FILE)
     app, api = web_application()
-    resource_mapping(picking_system_mapper, api, app_params["endpoint_prefix"], myDB)
+    resource_mapping(picking_system_mapper, api, app_params["endpoint_prefix"], myDB, app_params["enable_writing"])
     app.run(ssl_context=app_params["ssl_context"], host=app_params["broadcastIp"], port=app_params["port"])
 
     # closing connection with MySQL

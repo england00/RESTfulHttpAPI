@@ -4,14 +4,17 @@ import json
 
 class PickingSystemModel(IPickingSystemModel):
 
-    def __init__(self, pick_and_place_id, endpoint, resource_mapper):
-        self.pick_and_place_id = pick_and_place_id
-        self.endpoint = endpoint
-        self.resources_mapper = resource_mapper
+    def __init__(self, *args):
+        self.pick_and_place_id = args[0]
+        self.endpoint = args[1]
+        self.resources_mapper = args[2]
         self.path_list = None
         self.resource_path_list = None
         self.obtaining_path_list()
         self.obtaining_resource_path_list()
+
+        if len(args) > 0 and isinstance(args[0], dict):
+            vars(self).update(args[0])
 
     def get_pick_and_place_id(self):
         return self.pick_and_place_id
@@ -83,4 +86,5 @@ class PickingSystemModel(IPickingSystemModel):
 
     @staticmethod
     def object_mapping(dictionary):
+        print(dictionary)
         return json.loads(json.dumps(dictionary), object_hook=PickingSystemModel)

@@ -1,12 +1,12 @@
-import logging
 import yaml
 from database.queries.resource_queries import *
 from models.resource_model import ResourceModel
 from error.configuration_file_error import ConfigurationFileError
+from error.general_error import GeneralError
 
 
 class ResourcesMapper:
-    _STR_RESOURCE_CONFIG_FILE = "./config/file/methods.yaml"
+    _STR_RESOURCE_CONFIG_FILE = "./config/file/resources.yaml"
 
     def __init__(self, config_object=None, config_file_path=None, base_topic=None, initialization=False, system_id=None,
                  database=None):
@@ -24,23 +24,23 @@ class ResourcesMapper:
                         self._mapper = yaml.safe_load(file)
                 except Exception as e:
                     logging.error(str(e))
-                    raise ConfigurationFileError("Error while reading configuration file") from None
+                    raise ConfigurationFileError("ERROR: problem occurred while reading configuration") from None
             else:
                 try:
                     with open(self._STR_RESOURCE_CONFIG_FILE, 'r') as file:
                         self._mapper = yaml.safe_load(file)
                 except Exception as e:
                     logging.error(str(e))
-                    raise ConfigurationFileError("Error while reading configuration") from None
+                    raise ConfigurationFileError("ERROR: problem occurred while reading configuration") from None
 
             try:
-                for key in self._mapper["methods"]:
-                    self._resources[key] = ResourceModel.object_mapping(self._mapper["methods"][key])
+                for key in self._mapper["resources"]:
+                    self._resources[key] = ResourceModel.object_mapping(self._mapper["resources"][key])
                     if base_topic is not None:
                         self._resources[key].set_topic(base_topic + self._resources[key].get_topic())
             except Exception as e:
                 logging.error(str(e))
-                raise ConfigurationFileError("Error while parsing configuration data") from None
+                raise ConfigurationFileError("ERROR: problem occurred while parsing configuration data") from None
 
         else:
             self.read_from_db()
@@ -65,24 +65,38 @@ class ResourcesMapper:
             self._resources[resource_model.uuid] = resource_model
 
     def get_resources(self):
-        self.read_from_db()
-        return self._resources
+        if self.myDB is not None:
+            self.read_from_db()
+            return self._resources
+        else:
+            return self._resources
 
     def add_resource(self, new_resource):
-        if isinstance(new_resource, ResourceModel):
-            self.myDB.execute_query(insert_row_resource_table(new_resource, new_resource.get_picking_system()))
-            self._resources[new_resource.get_uuid()] = new_resource
-        else:
-            raise TypeError("Error adding new resource. Only ResourceModel objects are allowed")
+        try:
+            if isinstance(new_resource, ResourceModel):
+                self.myDB.execute_query(insert_row_resource_table(new_resource, new_resource.get_picking_system()))
+                self._resources[new_resource.get_uuid()] = new_resource
+        except Exception as e:
+            logging.error(str(e))
+            raise GeneralError("ERROR: problem occurred while adding new resource. "
+                               "Only ResourceModel objects are allowed") from None
 
     def update_resource(self, update_resource):
-        if isinstance(update_resource, ResourceModel):
-            self.myDB.execute_query(modify_row_resource_table(update_resource))
-            self._resources[update_resource.get_uuid()] = update_resource
-        else:
-            raise TypeError("Error updating the resource. Only ResourceModel objects are allowed")
+        try:
+            if isinstance(update_resource, ResourceModel):
+                self.myDB.execute_query(modify_row_resource_table(update_resource))
+                self._resources[update_resource.get_uuid()] = update_resource
+        except Exception as e:
+            logging.error(str(e))
+            raise GeneralError("ERROR: problem occurred while updating the resource. "
+                               "Only ResourceModel objects are allowed") from None
 
     def remove_resource(self, key):
-        if key in self._resources.keys():
-            self.myDB.execute_query(delete_row_resource_table(self._resources[key]))
-            del self._resources[key]
+        try:
+            if key in self._resources.keys():
+                self.myDB.execute_query(delete_row_resource_table(self._resources[key]))
+                del self._resources[key]
+        except Exception as e:
+            logging.error(str(e))
+            raise GeneralError("ERROR: problem occurred while deleting the resource. "
+                               "The searched resource not exists") from None

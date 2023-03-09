@@ -1,5 +1,5 @@
 host: "localhost"
-user: "root"
+user: "API_HTTP_server"
 password: "HakertzDB32!"
 charset: "utf8"
 chosen_database: "api_database"
