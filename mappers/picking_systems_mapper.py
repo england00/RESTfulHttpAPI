@@ -19,16 +19,16 @@ class PickingSystemsMapper:
                 logging.error(str(e))
                 raise ConfigurationFileError("ERROR: problem occurred while reading configuration") from None
 
-            #try:
-            for key in self._mapper["systems"]:
-                value = self._mapper["systems"][key]
-                self.picking_system_dictionary[key] = PickingSystemModel(value['pick_and_place_id'],
-                                                                         value['endpoint'],
-                                                                         ResourcesMapper(
-                                                                             config_file_path=config_resource_file_path))
-            # except Exception as e:
-            #    logging.error(str(e))
-            #    raise ConfigurationFileError("ERROR: problem occurred while parsing configuration data") from None
+            try:
+                for key in self._mapper["systems"]:
+                    value = self._mapper["systems"][key]
+                    self.picking_system_dictionary[key] = PickingSystemModel(value['pick_and_place_id'],
+                                                                             value['endpoint'],
+                                                                             ResourcesMapper(
+                                                                                 config_file_path=config_resource_file_path))
+            except Exception as e:
+                logging.error(str(e))
+                raise ConfigurationFileError("ERROR: problem occurred while parsing configuration data") from None
 
         else:
             self.read_from_db()
