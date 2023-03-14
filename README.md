@@ -1,6 +1,6 @@
 # Python - IoT Inventory - API HTTP RESTful
 
-This project is an implementation of a simple API HTTP RESTful linked to a MySQL database, 
+This project is a simple implementation of an API HTTP RESTful linked to a MySQL database, 
 which stores all the resources an of different pick and place systems and location inventory through 
 an HTTP RESTful API.
 
