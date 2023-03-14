@@ -1,4 +1,4 @@
-# Python - IoT Inventory - API HTTP RESTful
+# API HTTP RESTful
 
 This project is a simple implementation of an API HTTP RESTful server, which takes the 
 information of all the resource of different remote pick and place systems from a linked 
