@@ -16,6 +16,9 @@ class ResourcesDiscovery(IResourcesDiscovery):
                 system_dict = system.__dict__
                 del system_dict["resources_mapper"]
                 del system_dict["path_list"]
+                for i in range(len(system_dict["resource_path_list"])):
+                    system_dict["resource_path_list"][i] = str(self.endpoint + system.get_endpoint() +
+                                                               system_dict["resource_path_list"][i])
                 system_list.append(system_dict)
 
             # checking not having an empty list
