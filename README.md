@@ -1,58 +1,61 @@
 # Python - IoT Inventory - API HTTP RESTful
 
-This project is a simple implementation of an API HTTP RESTful linked to a MySQL database, 
-which stores all the resources an of different pick and place systems and location inventory through 
-an HTTP RESTful API.
+This project is a simple implementation of an API HTTP RESTful server, which takes the 
+information of all the resource of different remote pick and place systems from a linked 
+local MySQL database.
 
 The implementation is based on the following Python Frameworks 
-
 - Flask: https://flask.palletsprojects.com/en/2.0.x/
 - Flask RESTful: https://flask-restful.readthedocs.io/en/latest/index.html
 
-APIs are exposed through a configurable port (7070) and accessible locally at: 
-- http://127.0.0.1:7070/api/iot/
-- https://192.168.1.2:7070/api/iot/ - https://192.168.1.10:7070/api/iot/
-- https://79.21.207.114:7070/api/iot/
+The API server is configured with the following parameters (/config/file/database.yaml):
+- endpoint_prefix: "/api/iot"
+- localhost: "127.0.0.1"
+- broadcastIp: "0.0.0.0"
+- port: 7070
+- ssl_context: "adhoc"
+- enable_writing: False
+
+The local database is linked with the following parameters (/config/file/database.yaml):
+- host: "localhost"
+- user: "MQTT_client"
+- password: "HakertzDB64!"
+- charset: "utf8"
+- chosen_database: "api_database"
+
+There are also other two configuration file:
+- /config/file/systems.yaml, giving the right configuration when database is built and also to setting the systems managing data structure, the system mapper;
+- /config/file/resources.yaml, giving the right configuration when database is built and also to setting the resources managing data structure, the resource mapper.
 
 ## Modeled REST Resources
 
-The IoT Inventory resources currently modeled are:
+The resources off all the systems are available at the following topics:
+- Start Stop Cycle (endpoint_prefix + "/" + system_name + "/" + "production/cycle/signals/start_stop_cycle");
+- Done Bags (endpoint_prefix + "/" + system_name + "/" + "production/cycle/signals/done_bags");
+- Total Bags (endpoint_prefix + "/" + system_name + "/" + "production/cycle/signals/total_bags");
+- Placed Object (endpoint_prefix + "/" + system_name + "/" + "production/cycle/signals/placed_objects");
+- Cycle Time (endpoint_prefix + "/" + system_name + "/" + "production/cycle/time");
+- Current Object (endpoint_prefix + "/" + system_name + "/" + "production/cycle/signals/current_object");
+- Selected Recipes (endpoint_prefix + "/" + system_name + "/" + "production/cycle/recipes/selected_recipe");
+- Recipe Objects Types (endpoint_prefix + "/" + system_name + "/" + "production/cycle/recipes/objects_types");
+- Recipe End Effector Indexes (endpoint_prefix + "/" + system_name + "/" + "production/cycle/recipes/end_effector_indexes");
+- Recipe Object Types Box Positions (endpoint_prefix + "/" + system_name + "/" + "production/cycle/recipes/object_types_box_positions");
+- Recipe Object Types Numbers (endpoint_prefix + "/" + system_name + "/" + "production/cycle/recipes/object_types_numbers");
+- Cobot State Cycle (endpoint_prefix + "/" + system_name + "/" + "cobot/states/cobot_state_cycle");
+- Robot Mode (endpoint_prefix + "/" + system_name + "/" + "cobot/states/robot_mode");
+- Power On Robot (endpoint_prefix + "/" + system_name + "/" + "cobot/states/power_on_robot");
+- Safety (endpoint_prefix + "/" + system_name + "/" + "cobot/states/safety");
+- Joint Angles (endpoint_prefix + "/" + system_name + "/" + "cobot/joints/sensors/angles");
+- Joint Angles Velocities (endpoint_prefix + "/" + system_name + "/" + "cobot/joints/sensors/velocities");
+- Joint Current Consumption (endpoint_prefix + "/" + system_name + "/" + "cobot/joints/sensors/current_consumptions");
+- Joint Temperatures (endpoint_prefix + "/" + system_name + "/" + "cobot/joints/sensors/temperatures");
+- TCP (endpoint_prefix + "/" + system_name + "/" + "cobot/states/tcp");
+- 6D Pose Estimation (endpoint_prefix + "/" + system_name + "/" +  "ai_on_edge/inference/6d_pose_estimation");
+- Confidence (endpoint_prefix + "/" + system_name + "/" + "ai_on_edge/inference/scores/confidence");
+- Cosine Similarity (endpoint_prefix + "/" + system_name + "/" + "ai_on_edge/inference/scores/cosine_similarity");
+- Inference Time (endpoint_prefix + "/" + system_name + "/" + "ai_on_edge/inference/time").
 
-- Start Stop Cycle (/production/cycle/signals/start_stop_cycle);
-- Done Bags (/production/cycle/signals/done_bags);
-- Done Bag (/production/cycle/signals/done_bag);
-- Total Bags (/production/cycle/signals/total_bags);
-- Placed Object (/production/cycle/signals/placed_objects);
-- Actual Done Bags (/production/cycle/signals/actual_done_bags);
-- Actual Lost Objects (/production/cycle/signals/actual_lost_objects);
-- Cycle Time (/production/cycle/time);
-- Current Object (/production/cycle/signals/current_object);
-- Selected Recipes (/production/cycle/recipes/selected_recipe);
-- Recipe Objects Types (/production/cycle/recipes/objects_types);
-- Recipe End Effector Indexes (/production/cycle/recipes/end_effector_indexes);
-- Recipe Object Types Box Positions (/production/cycle/recipes/object_types_box_positions);
-- Recipe Object Types Numbers (/production/cycle/recipes/object_types_numbers);
-- Cobot State Cycle (/cobot/states/cobot_state_cycle);
-- Robot Mode (/cobot/states/robot_mode);
-- Power On Robot (/cobot/states/power_on_robot);
-- Safety (/cobot/states/safety);
-- Alarm Counter (/cobot/states/alarm_counter);
-- Joint Angles (/cobot/joints/sensors/angles);
-- Joint Angles Velocities (/cobot/joints/sensors/velocities);
-- Joint Current Consumption (/cobot/joints/sensors/current_consumptions);
-- Joint Temperatures (/cobot/joints/sensors/temperatures);
-- TCP (/cobot/states/tcp);
-- 6D Pose Estimation (/ai_on_edge/inference/6d_pose_estimation);
-- Request 6D Pose Estimation (/ai_on_edge/inference/request_6d_pose_estimation);
-- Confidence (/ai_on_edge/inference/scores/confidence);
-- Cosine Similarity (/ai_on_edge/inference/scores/cosine_similarity);
-- Inference Time (/ai_on_edge/inference/time);
-- RGB Image (/ai_on_edge/image/rgb_image);
-- Detection Image (/ai_on_edge/image/detection_image);
-- GD Pose Estimation Image (/ai_on_edge/image/6d_pose_estimation_image);
-- Picking Point Image (/ai_on_edge/image/picking_point_image);
-
-For each resource are available as attributes:
+For each resource are available the following attributes:
 - uuid (Identifier);
 - version;
 - name;
